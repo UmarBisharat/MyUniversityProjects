@@ -47,4 +47,3 @@ Switch-case & Input handling using Scanner.
 
 This project was special for me because it was my first big OOP project in Java.
 I felt like I was building a real car showroom simulation and learned how to use threads to make the program more realistic. 🚘⚡
-Do you want me to also prepare README descriptions for all your semester projects one by one (whenever you share code), so that later you can directly copy-paste into GitHub?
