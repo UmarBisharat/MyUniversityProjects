@@ -69,5 +69,3 @@ Enter your choice:
 
 This project was built in 1st Semester as part of my university learning journey.
 It demonstrates understanding of structs, vectors, file handling, and menu-driven programming in C++.
-
-Would you like me to also create a README template for your Semester-1 Video Rental Shop project next, if you share its code?
