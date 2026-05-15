@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LensLink-Join</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:        #020617;
+      --panel:     #0f172a;
+      --border:    rgba(255,255,255,0.07);
+      --accent:    #38bdf8;
+      --accent2:   #0ea5e9;
+      --text:      #f0f2f5;
+      --muted:     #5a6070;
+      --soft:      #9aa0ad;
+      --error:     #f87171;
+      --success:   #34d399;
+      --warning:   #fbbf24;
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Poppins', sans-serif;
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      overflow: hidden;
+    }
+
+    /* ── LEFT PANEL ─────────────────────────────────────────── */
+    .left {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 48px;
+      background: var(--panel);
+      border-right: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .left::before {
+      content: '';
+      position: absolute;
+      top: -120px; left: -120px;
+      width: 480px; height: 480px;
+      background: radial-gradient(circle, rgba(56,189,248,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .left::after {
+      content: '';
+      position: absolute;
+      bottom: -80px; right: -80px;
+      width: 320px; height: 320px;
+      background: radial-gradient(circle, rgba(56,189,248,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .logo {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 800;
+      font-size: 1.5rem;
+      letter-spacing: -0.03em;
+      color: var(--text);
+      position: relative;
+      z-index: 1;
+    }
+
+    .logo span { color: var(--accent); }
+
+    .left-body {
+      position: relative;
+      z-index: 1;
+    }
+
+    .left-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border: 1px solid rgba(56,189,248,0.3);
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 28px;
+    }
+
+    .left-tag::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.8); }
+    }
+
+    .left-headline {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 800;
+      font-size: clamp(2.2rem, 3.5vw, 3rem);
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      margin-bottom: 20px;
+    }
+
+    .left-headline em {
+      font-style: normal;
+      color: var(--accent);
+    }
+
+    .left-desc {
+      font-size: 0.95rem;
+      color: var(--soft);
+      line-height: 1.7;
+      max-width: 340px;
+      margin-bottom: 40px;
+    }
+
+    .features {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .feature {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.88rem;
+      color: var(--soft);
+    }
+
+    .feature-dot {
+      width: 28px; height: 28px;
+      border-radius: 8px;
+      background: rgba(56,189,248,0.1);
+      border: 1px solid rgba(56,189,248,0.2);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      font-size: 0.75rem;
+    }
+
+    .left-foot {
+      font-size: 0.78rem;
+      color: var(--muted);
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── RIGHT PANEL ────────────────────────────────────────── */
+    .right {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 40px;
+      overflow-y: auto;
+    }
+
+    .form-shell {
+      width: 100%;
+      max-width: 420px;
+    }
+
+    /* ── STEP INDICATOR ─────────────────────────────────────── */
+    .step-bar {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      margin-bottom: 36px;
+    }
+
+    .step-node {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--muted);
+      transition: color 0.3s;
+    }
+
+    .step-node.active { color: var(--text); }
+    .step-node.done { color: var(--accent); }
+
+    .step-circle {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      border: 2px solid currentColor;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 700;
+      transition: all 0.3s;
+      flex-shrink: 0;
+    }
+
+    .step-node.active .step-circle {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #020617;
+    }
+
+    .step-node.done .step-circle {
+      background: rgba(56,189,248,0.15);
+    }
+
+    .step-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+      margin: 0 10px;
+      transition: background 0.3s;
+    }
+
+    .step-line.done { background: rgba(56,189,248,0.4); }
+
+    /* ── FORM STEPS ─────────────────────────────────────────── */
+    .step { display: none; }
+    .step.active {
+      display: block;
+      animation: fadeUp 0.3s ease;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .step-title {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 700;
+      font-size: 1.6rem;
+      letter-spacing: -0.02em;
+      margin-bottom: 6px;
+    }
+
+    .step-sub {
+      font-size: 0.88rem;
+      color: var(--soft);
+      margin-bottom: 28px;
+    }
+
+    /* ── FIELDS ─────────────────────────────────────────────── */
+    .field { margin-bottom: 18px; }
+
+    .field-label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .field-input {
+      width: 100%;
+      padding: 13px 16px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s, background 0.2s;
+      appearance: none;
+    }
+
+    .field-input::placeholder { color: var(--muted); }
+    .field-input:focus {
+      border-color: rgba(56,189,248,0.5);
+      background: rgba(56,189,248,0.03);
+    }
+    .field-input.err {
+      border-color: var(--error);
+      background: rgba(255,107,107,0.05);
+    }
+
+    select.field-input {
+      cursor: pointer;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%235a6070' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 36px;
+    }
+
+    select.field-input option { background: #0f172a; }
+
+    /* OTP row */
+    .otp-row { display: flex; gap: 10px; }
+    .otp-row .field-input { flex: 1; }
+
+    .otp-btn {
+      flex-shrink: 0;
+      padding: 13px 16px;
+      background: rgba(56,189,248,0.08);
+      border: 1px solid rgba(56,189,248,0.25);
+      border-radius: 10px;
+      color: var(--accent);
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .otp-btn:hover:not(:disabled) { background: rgba(56,189,248,0.15); }
+    .otp-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .otp-timer {
+      font-family: 'Poppins', monospace;
+      font-size: 0.8rem;
+      color: var(--warning);
+      display: none;
+    }
+
+    /* Password strength */
+    .strength-track {
+      display: flex;
+      gap: 4px;
+      margin-top: 8px;
+    }
+
+    .strength-seg {
+      flex: 1;
+      height: 3px;
+      border-radius: 99px;
+      background: rgba(255,255,255,0.06);
+      transition: background 0.3s;
+    }
+
+    /* Feedback message */
+    .field-msg {
+      font-size: 0.8rem;
+      margin-top: 6px;
+      min-height: 16px;
+      display: none;
+    }
+    .field-msg.show { display: block; }
+    .field-msg.error   { color: var(--error); }
+    .field-msg.success { color: var(--success); }
+    .field-msg.info    { color: var(--accent); }
+
+    /* Global msg */
+    .form-msg {
+      padding: 12px 16px;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      margin-bottom: 16px;
+      display: none;
+      align-items: center;
+      gap: 10px;
+    }
+    .form-msg.show { display: flex; }
+    .form-msg.error   { background: rgba(255,107,107,0.1); border: 1px solid rgba(255,107,107,0.25); color: var(--error); }
+    .form-msg.success { background: rgba(74,222,128,0.1); border: 1px solid rgba(74,222,128,0.25); color: var(--success); }
+    .form-msg.info    { background: rgba(56,189,248,0.07); border: 1px solid rgba(56,189,248,0.2); color: var(--accent); }
+
+    /* Primary button */
+    .btn-primary {
+      width: 100%;
+      padding: 14px;
+      background: var(--accent);
+      color: #020617;
+      border: none;
+      border-radius: 10px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      cursor: pointer;
+      margin-top: 6px;
+      transition: background 0.2s, transform 0.1s, opacity 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-primary:hover { background: var(--accent2); }
+    .btn-primary:active { transform: scale(0.98); }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .form-foot {
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-top: 22px;
+    }
+
+    .form-foot a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .form-foot a:hover { text-decoration: underline; }
+
+    /* Spinner */
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spinner {
+      width: 16px; height: 16px;
+      border: 2px solid rgba(2,6,23,0.3);
+      border-top-color: #020617;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      flex-shrink: 0;
+    }
+
+    /* ── RESPONSIVE ─────────────────────────────────────────── */
+    @media (max-width: 768px) {
+      body { grid-template-columns: 1fr; }
+      .left { display: none; }
+      .right { padding: 32px 24px; align-items: flex-start; padding-top: 60px; }
+    }
+  </style>
+<link rel="stylesheet" href="light-theme.css"></head>
+<body>
+
+<!-- LEFT -->
+<div class="left">
+  <div class="logo"><span>LensLink <i class="fa-solid fa-camera-retro"></i></span></div>
+
+  <div class="left-body">
+   <div class="left-tag">Campus Photography Platform</div>
+    <h1 class="left-headline">
+     Find & hire<br><em>campus photographers</em>
+    </h1>
+    <p class="left-desc">
+     LensLink connects student photographers with people who need professional shoots, from events to personal projects. Build your portfolio or hire the right photographer easily.
+    </p>
+    <div class="features">
+      <div class="feature">
+        <div class="feature-dot">✦</div>
+        Campus-verified photographers  
+      </div>
+      <div class="feature">
+        <div class="feature-dot">◈</div>
+        Book for events, shoots & projects 
+      </div>
+      <div class="feature">
+        <div class="feature-dot">⬡</div>
+        Secure hiring & communication  
+      </div>
+    </div>
+  </div>
+
+  <div class="left-foot">© 2026 LensLink · Campus Exclusive</div>
+</div>
+
+<!-- RIGHT -->
+<div class="right">
+  <div class="form-shell">
+
+    <!-- Step indicator -->
+    <div class="step-bar">
+      <div class="step-node active" id="node1">
+        <div class="step-circle" id="circle1">1</div>
+        <span>Account</span>
+      </div>
+      <div class="step-line" id="line1"></div>
+      <div class="step-node" id="node2">
+        <div class="step-circle" id="circle2">2</div>
+        <span>Verify</span>
+      </div>
+      <div class="step-line" id="line2"></div>
+      <div class="step-node" id="node3">
+        <div class="step-circle" id="circle3">3</div>
+        <span>Password</span>
+      </div>
+    </div>
+
+    <!-- ── STEP 1: Role + Email ── -->
+    <div class="step active" id="step1">
+      <div class="step-title">Create account</div>
+      <div class="step-sub">Select your role and get started with LensLink.</div>
+
+      <div class="form-msg" id="msg1"></div>
+
+      <div class="field">
+        <label class="field-label">I want to join as</label>
+        <select class="field-input" id="role">
+          <option value="" disabled selected>Select a role…</option>
+          <option value="freelancer">Photographer</option>
+          <option value="client">Client</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label class="field-label">University Email</label>
+        <input type="email" class="field-input" id="email" placeholder="you@students.muet.edu.pk">
+      </div>
+
+      <button type="button" class="btn-primary" id="btn1" onclick="goToVerify()">
+        Continue
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+
+      <div class="form-foot">Already have an account? <a href="login.html">Sign in</a></div>
+    </div>
+
+    <!-- ── STEP 2: OTP ── -->
+    <div class="step" id="step2">
+      <div class="step-title">Check your inbox</div>
+      <div class="step-sub" id="otpSubtext">We’ll send a verification code to your university email.</div>
+
+      <div class="form-msg" id="msg2"></div>
+
+      <div class="field">
+        <label class="field-label">One-time code</label>
+        <div class="otp-row">
+          <input type="text" class="field-input" id="otp" placeholder="Enter code" maxlength="8" autocomplete="one-time-code">
+          <button type="button" class="otp-btn" id="sendOtpBtn" onclick="sendOTP()">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M2 8l12-6-6 12V9L2 8z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+            <span id="sendOtpLabel">Send code</span>
+            <span class="otp-timer" id="otpTimer"></span>
+          </button>
+        </div>
+      </div>
+
+      <button type="button" class="btn-primary" id="btn2" onclick="verifyOTP()">
+        Verify code
+      </button>
+
+      <div class="form-foot">
+        Wrong email? <a href="#" onclick="goBack(1); return false;">Go back</a>
+      </div>
+    </div>
+
+    <!-- ── STEP 3: Password ── -->
+    <div class="step" id="step3">
+      <div class="step-title">Set your password</div>
+      <div class="step-sub">Choose a strong password to secure your account.</div>
+
+      <div class="form-msg" id="msg3"></div>
+
+      <div class="field">
+        <label class="field-label">Password</label>
+        <input type="password" class="field-input" id="password" placeholder="Min. 8 characters" oninput="checkStrength()">
+        <div class="strength-track">
+          <div class="strength-seg" id="s1"></div>
+          <div class="strength-seg" id="s2"></div>
+          <div class="strength-seg" id="s3"></div>
+          <div class="strength-seg" id="s4"></div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Confirm password</label>
+        <input type="password" class="field-input" id="confirm" placeholder="Repeat password">
+      </div>
+
+      <button type="button" class="btn-primary" id="btn3" onclick="createAccount()">
+        Create account
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<script src="config.js"></script>
+<script src="register.js"></script>
+</body>
+</html>

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Email | LensLink</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <script src="config.js"></script>
+    <link rel="stylesheet" href="notifications.css">
+    <script src="notifications.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap');
+
+        body {
+            margin: 0;
+            font-family: 'Outfit', sans-serif;
+            background: #020617;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            /* Firefox */
+            scrollbar-width: thin;
+            scrollbar-color: #38bdf8 #020617;
+        }
+
+        /* CUSTOM SCROLLBAR (Webkit) */
+        ::-webkit-scrollbar {
+            width: 7px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #020617;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 10px;
+            border: 1px solid #020617;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #38bdf8;
+        }
+
+        .verify-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+            color: #38bdf8;
+        }
+
+        h1 { margin: 0 0 10px; font-weight: 600; }
+        p { color: #94a3b8; font-size: 1.1rem; line-height: 1.5; }
+
+        .btn {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 12px 30px;
+            background: #38bdf8;
+            color: #020617;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(56, 189, 248, 0.3);
+        }
+
+        .loading-spinner {
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-left-color: #38bdf8;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .magic-test {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+
+        input {
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 8px;
+            border-radius: 6px;
+            color: white;
+            margin-bottom: 10px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        /* =========================
+   📱 MOBILE (max 600px)
+========================= */
+@media (max-width: 600px) {
+
+  /* BODY FIX */
+  body {
+    height: auto;
+    min-height: 100vh;
+    overflow: auto; /* allow scroll */
+    align-items: flex-start; /* no vertical squeeze */
+    padding: 30px 15px;
+  }
+
+  /* CARD */
+  .verify-card {
+    padding: 25px 20px;
+    border-radius: 16px;
+  }
+
+  /* ICON */
+  .icon {
+    font-size: 45px;
+    margin-bottom: 15px;
+  }
+
+  /* TEXT */
+  h1 {
+    font-size: 1.4rem;
+  }
+
+  p {
+    font-size: 0.95rem;
+  }
+
+  /* BUTTON */
+  .btn {
+    width: 100%;
+    padding: 12px;
+    font-size: 0.95rem;
+  }
+
+  /* SPINNER */
+  .loading-spinner {
+    width: 30px;
+    height: 30px;
+  }
+}
+    </style>
+<link rel="stylesheet" href="light-theme.css"></head>
+<body>
+
+    <div class="verify-card" id="card">
+        <div id="statusContent">
+            <div class="icon"><i class="fas fa-envelope-open-text"></i></div>
+            <h1>Verifying Email</h1>
+            <p>Please wait while we confirm your email address...</p>
+            <div class="loading-spinner"></div>
+        </div>
+
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const token = urlParams.get('token');
+        const statusContent = document.getElementById('statusContent');
+        async function verifyEmail() {
+            if (!token) {
+                showError("No verification token found. Please check your email link.");
+                return;
+            }
+
+            try {
+                const response = await fetch(`${window.CONFIG.API_BASE_URL}/api/verify-email/${token}/`);
+                const data = await response.json();
+
+                if (response.ok) {
+                    showSuccess(data.message);
+                } else {
+                    showError(data.error || "Verification failed. Token may be invalid or expired.");
+                }
+            } catch (err) {
+                showError("Connection error. Please try again later.");
+            }
+        }
+
+        function showSuccess(msg) {
+            statusContent.innerHTML = `
+                <div class="icon" style="color:#22c55e;"><i class="fas fa-check-circle"></i></div>
+                <h1>Verified!</h1>
+                <p>${msg}</p>
+                <a href="login.html" class="btn">Proceed to Login</a>
+            `;
+        }
+
+        function showError(msg) {
+            statusContent.innerHTML = `
+                <div class="icon" style="color:#ef4444;"><i class="fas fa-exclamation-triangle"></i></div>
+                <h1>Oops!</h1>
+                <p>${msg}</p>
+                <a href="index.html" class="btn" style="background:#475569; color:white;">Back to Home</a>
+            `;
+        }
+
+        // Initialize
+        setTimeout(verifyEmail, 1500); // Small delay for aesthetic effect
+    </script>
+</body>
+</html>

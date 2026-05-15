@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create Client Profile</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <script src="config.js"></script>
+  <link rel="stylesheet" href="notifications.css">
+  <script src="notifications.js"></script>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Segoe UI", sans-serif;
+      /* Firefox */
+      scrollbar-width: thin;
+      scrollbar-color: #38bdf8 #020617;
+    }
+
+    /* CUSTOM SCROLLBAR (Webkit) */
+    ::-webkit-scrollbar {
+      width: 7px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #020617;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1e293b;
+      border-radius: 10px;
+      border: 1px solid #020617;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #38bdf8;
+    }
+
+    body {
+      background: #020617;
+      color: #e5e7eb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      margin-top: 40px;
+      margin-bottom: 40px;
+      width: 100%;
+      max-width: 600px;
+      padding: 40px;
+      background: linear-gradient(145deg, #0f172a, #020617);
+      border-radius: 20px;
+      border: 1px solid #38bdf8;
+      box-shadow: 0 0 25px rgba(56, 189, 248, 0.2);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 10px;
+      color: #38bdf8;
+    }
+
+    p.subtitle {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #94a3b8;
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: 600;
+      font-size: large;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      padding: 18px;
+      margin-top: 8px;
+      border-radius: 10px;
+      border: 1px solid #38bdf8;
+      background: #020617;
+      color: #e5e7eb;
+    }
+
+    input,
+    placeholder {
+      font-size: 1rem;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 25px;
+      padding: 12px;
+      border-radius: 12px;
+      border: none;
+      background: #38bdf8;
+      color: #020617;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.6);
+      transform: translateY(-2px);
+    }
+  </style>
+<link rel="stylesheet" href="light-theme.css"></head>
+
+<body>
+
+  <div class="container">
+    <h1>Create Client Profile</h1>
+    <label>Name</label>
+    <input type="text" id="clientName" placeholder="Enter your name" />
+
+    <label>Profile Picture</label>
+    <input type="file" id="profilePic" accept="image/*">
+
+    <label>Company/Institue Name</label>
+    <input type="text" id="companyName" placeholder="Write company or institute name if any" />
+
+    <label>Photography Type</label>
+    <input type="text" id="projectType" placeholder="e.g. Wedding, Portrait, Product" />
+
+    <label>Budget Range (Rs)</label>
+    <input type="text" id="budget" placeholder="e.g. 50,000 - 100,000" />
+
+    <button type="button" onclick="createClientProfile()">Create Client Profile</button>
+  </div>
+
+  <script>
+    async function createClientProfile() {
+      const btn = document.querySelector(".container button");
+      const originalText = btn.innerText;
+
+      const name = document.getElementById("clientName").value.trim();
+      const company = document.getElementById("companyName").value.trim();
+      const projectType = document.getElementById("projectType").value.trim();
+      const budget = document.getElementById("budget").value.trim();
+      const fileInput = document.getElementById("profilePic");
+
+      const token = localStorage.getItem("access_token");
+      const userEmail = localStorage.getItem("loggedInUser");
+
+      if (!token || !userEmail) {
+        showToast("Please log in first.", "error");
+        window.location.href = "login.html";
+        return;
+      }
+
+      if (!name || !projectType || !budget || !userEmail) {
+        showToast("Please fill all required fields.", "warning");
+        return;
+      }
+
+      // Effect: Show loading
+      btn.innerText = "Creating Profile...";
+      btn.disabled = true;
+
+      const formData = new FormData();
+      formData.append('name', name);
+      formData.append('company_name', company);
+      formData.append('project_type', projectType);
+      formData.append('budget_range', budget);
+      formData.append('is_completed', 'true'); // MARK AS COMPLETED
+
+      if (fileInput.files && fileInput.files[0]) {
+        formData.append('profile_pic', fileInput.files[0]);
+      } else {
+        showToast("Please upload a profile picture.", "warning");
+        btn.innerText = originalText;
+        btn.disabled = false;
+        return;
+      }
+
+      try {
+        const response = await fetch(`${window.CONFIG.API_BASE_URL}/api/profiles/me/`, {
+          method: "PATCH",
+          headers: {
+            "Authorization": "Bearer " + token
+          },
+          body: formData
+        });
+
+        if (response.ok) {
+          showToast("Client profile created successfully!", "success");
+          sessionStorage.setItem('profileSuccess', true);
+          window.location.href = "clientDashboard.html";
+        } else {
+          const errData = await response.json();
+          showToast("Error: " + JSON.stringify(errData), "error");
+          btn.innerText = originalText;
+          btn.disabled = false;
+        }
+      } catch (err) {
+        console.error("Fetch error:", err);
+        showToast("Network error.", "error");
+        btn.innerText = originalText;
+        btn.disabled = false;
+      }
+    }
+  </script>
+
+</body>
+
+</html>

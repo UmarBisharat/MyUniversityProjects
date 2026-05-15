@@ -1,0 +1,53 @@
+/* successIsland.css */
+
+.success-island {
+    position: fixed;
+    top: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 12px 24px;
+    border-radius: 99px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+    z-index: 9999;
+    transition: top 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    color: white;
+    font-family: 'Inter', sans-serif;
+}
+
+.success-island.show {
+    top: 24px;
+}
+
+.success-island .icon-circle {
+    width: 28px;
+    height: 28px;
+    background: #10b981;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: scaleIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.success-island .icon-circle i {
+    font-size: 14px;
+    color: white;
+}
+
+.success-island .message {
+    font-weight: 500;
+    font-size: 14px;
+    letter-spacing: -0.01em;
+}
+
+@keyframes scaleIn {
+    from { transform: scale(0); }
+    to { transform: scale(1); }
+}

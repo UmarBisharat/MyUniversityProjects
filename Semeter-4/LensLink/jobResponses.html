@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>LensLink - Shoot Applications</title>
+<script src="config.js"></script>
+<link rel="stylesheet" href="notifications.css">
+<script src="notifications.js"></script>
+<style>
+body { 
+    background: #E5E7EB !important; /* Forces the light gray background */
+    color: #0F172A !important;      /* Forces dark text */
+    font-family: Arial; 
+    padding: 20px; 
+}
+
+/* CUSTOM SCROLLBAR (Webkit) */
+::-webkit-scrollbar {
+    width: 7px;
+}
+::-webkit-scrollbar-track {
+    background: #020617;
+}
+::-webkit-scrollbar-thumb {
+    background: #1e293b;
+    border-radius: 10px;
+    border: 1px solid #020617;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #38bdf8;
+}
+.response-card {
+  background:#1e293b; padding:15px; margin-bottom:15px;
+  border-radius:10px; border:1px solid rgba(56,189,248,0.3);
+}
+.response-card img { width:40px; height:40px; border-radius:50%; margin-right:10px; }
+.response-header { display:flex; align-items:center; gap:10px; margin-bottom:8px; }
+.message-btn {
+  background:#38bdf8; border:none; padding:6px 12px;
+  border-radius:6px; cursor:pointer; font-size:13px; margin-top:10px;
+}
+</style>
+<link rel="stylesheet" href="light-theme.css"></head>
+
+<body>
+
+<h2>Shoot Applications</h2>
+<div id="responsesContainer"></div>
+
+
+<script>
+const jobId = localStorage.getItem("selectedJobId");
+const token = localStorage.getItem("access_token");
+const container = document.getElementById("responsesContainer");
+
+async function loadResponses() {
+    if (!jobId || !token) {
+        container.innerHTML = "<p>Please select a job first.</p>";
+        return;
+    }
+    
+    container.innerHTML = "<p>Loading responses...</p>";
+    
+    try {
+        const response = await fetch(`${window.CONFIG.API_BASE_URL}/api/applications/?job=${jobId}`, {
+            headers: { "Authorization": `Bearer ${token}` }
+        });
+        const data = await response.json();
+        const allResponses = data.results || data;
+
+        container.innerHTML = "";
+        if(!Array.isArray(allResponses) || allResponses.length === 0){
+          container.innerHTML = "<p>No responses yet</p>";
+        } else {
+          allResponses.forEach(r => {
+            const div = document.createElement("div");
+            div.className = "response-card";
+            div.innerHTML = `
+              <div class="response-header">
+                <strong>${r.freelancer_name}</strong>
+              </div>
+              <p>${r.cover_letter}</p>
+  <div style="display:flex; gap:10px; margin-top:10px;">
+
+  <button 
+    onclick="messageFreelancer('${r.freelancer_email}', '${r.freelancer_name}')"
+    style="
+      padding:8px 14px;
+      border:none;
+      border-radius:8px;
+      font-weight:600;
+      cursor:pointer;
+      background:linear-gradient(135deg,#38bdf8,#0ea5e9);
+      color:#020617;
+      transition:all 0.25s ease;
+      white-space:nowrap;
+    "
+    onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 14px rgba(56,189,248,0.3)'"
+    onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'"
+  >
+    Message
+  </button>
+
+  <button 
+    onclick="viewPortfolio('${r.freelancer_portfolio}')"
+    style="
+      padding:8px 14px;
+      border-radius:8px;
+      font-weight:600;
+      cursor:pointer;
+      background:rgba(56,189,248,0.1);
+      color:#38bdf8;
+      border:1px solid rgba(56,189,248,0.4);
+      transition:all 0.25s ease;
+      white-space:nowrap;
+    "
+    onmouseover="this.style.transform='translateY(-2px)'; this.style.background='rgba(56,189,248,0.2)'; this.style.boxShadow='0 6px 14px rgba(56,189,248,0.2)'"
+    onmouseout="this.style.transform='translateY(0)'; this.style.background='rgba(56,189,248,0.1)'; this.style.boxShadow='none'"
+  >
+    View Portfolio
+  </button></div>
+            `;
+            container.appendChild(div);
+          });
+        }
+    } catch (err) {
+        console.error(err);
+        container.innerHTML = "<p>Error loading responses.</p>";
+    }
+}
+
+function messageFreelancer(email, name) {
+    if (!email || email === "undefined") {
+        showToast("Cannot initiate chat: Email missing.", "error");
+        return;
+    }
+    localStorage.setItem("activeChatUser", JSON.stringify({
+        name: name,
+        email: email,
+        avatar: "https://i.pravatar.cc/150"
+    }));
+    window.location.href = "chat.html";
+}
+
+function viewPortfolio(link) {
+    if (!link || link === "null" || link === "undefined" || link.trim() === "") {
+        if (typeof showToast === "function") {
+            showToast("Portfolio does not exist.", "error");
+        } else {
+            alert("Portfolio does not exist.");
+        }
+        return;
+    }
+    
+    let formattedLink = link.trim();
+    if (!/^https?:\/\//i.test(formattedLink)) {
+        formattedLink = 'https://' + formattedLink;
+    }
+    
+    try {
+        new URL(formattedLink);
+        window.open(formattedLink, '_blank');
+    } catch (e) {
+        if (typeof showToast === "function") {
+            showToast("Invalid portfolio link.", "error");
+        } else {
+            alert("Invalid portfolio link.");
+        }
+    }
+}
+
+
+loadResponses();
+</script>
+</body>
+</html>

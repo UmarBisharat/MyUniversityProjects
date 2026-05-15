@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Post a Job | LensLink</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <script src="config.js"></script>
+  <link rel="stylesheet" href="notifications.css">
+  <script src="notifications.js"></script>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Segoe UI", sans-serif;
+      /* Firefox */
+      scrollbar-width: thin;
+      scrollbar-color: #38bdf8 #020617;
+    }
+
+    /* CUSTOM SCROLLBAR (Webkit) */
+    ::-webkit-scrollbar {
+      width: 7px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #020617;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #1e293b;
+      border-radius: 10px;
+      border: 1px solid #020617;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #38bdf8;
+    }
+
+    body {
+      background: #020617;
+      color: #e5e7eb;
+    }
+
+    /* NAVBAR */
+
+    .navbar {
+      height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      border-bottom: 1px solid rgba(56, 189, 248, 0.3);
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #38bdf8;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 30px;
+      list-style: none;
+    }
+
+    .nav-links li {
+      cursor: pointer;
+      color: #cbd5f5;
+      font-size: large;
+    }
+
+    .nav-links li:hover {
+      color: #38bdf8;
+    }
+
+    .profile-btn {
+      font-weight: 600;
+    }
+
+    /* CONTAINER */
+
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 60px 20px;
+    }
+
+    /* CARD */
+
+    .card {
+      width: 520px;
+      background: linear-gradient(145deg, #0f172a, #020617);
+      border: 1px solid #38bdf8;
+      border-radius: 16px;
+      padding: 30px;
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.08);
+    }
+
+    .card h2 {
+      margin-bottom: 20px;
+      text-align: center;
+      color: #38bdf8;
+    }
+
+    /* INPUTS */
+
+    .input-group {
+      margin-bottom: 18px;
+    }
+
+    .input-group label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 14px;
+      color: #94a3b8;
+    }
+
+    .input-group input,
+    .input-group textarea {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      background: #020617;
+      color: white;
+    }
+
+    textarea {
+      resize: none;
+      height: 110px;
+    }
+
+    /* BUTTON */
+
+    .post-btn {
+      width: 100%;
+      padding: 12px;
+      background: #38bdf8;
+      border: none;
+      border-radius: 10px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .post-btn:hover {
+      opacity: 0.9;
+    }
+
+    .success {
+      margin-top: 15px;
+      color: #22c55e;
+      text-align: center;
+      font-weight: 500;
+    }
+  </style>
+<link rel="stylesheet" href="light-theme.css"></head>
+
+<body>
+
+  <nav class="navbar">
+    <div class="logo">LensLink<i class="fa-solid fa-camera-retro"></i></div>
+
+    <ul class="nav-links">
+      <li onclick="goDashboard()">Dashboard</li>
+      <li onclick="goBrowse()">Browse</li>
+      <li onclick="goMessages()">Messages</li>
+      <li onclick="goProfile()">Profile</li>
+    </ul>
+
+    <div class="profile-btn">Client</div>
+  </nav>
+
+
+  <div class="container">
+
+    <div class="card">
+
+      <h2>Post a Job</h2>
+
+      <div class="input-group">
+        <label>Shoot Title</label>
+        <input id="shootTitle" placeholder="e.g. Wedding Shoot, Birthday Event">
+      </div>
+
+
+      <div class="input-group">
+        <label>Event Date</label>
+        <input type="date" id="eventDate">
+      </div>
+      <div class="input-group">
+        <label>Event Location</label>
+        <input id="eventLocation" placeholder="e.g. Lahore, DHA Phase 6">
+      </div>
+
+      <div class="input-group">
+        <label>Budget (PKR)</label>
+        <input id="budget" type="number" placeholder="20000">
+      </div>
+
+
+      <button type="button" class="post-btn" onclick="apiPostJob(event)">Post Job</button>
+
+      <div id="successMsg" class="success"></div>
+
+    </div>
+  </div>
+
+
+  <script>
+    async function checkProfileCompleteness() {
+      const token = localStorage.getItem("access_token");
+      if (!token) return;
+
+      try {
+        const response = await fetch(`${window.CONFIG.API_BASE_URL}/api/profiles/me/`, {
+          headers: { "Authorization": `Bearer ${token}` }
+        });
+        const profile = await response.json();
+
+        if (response.ok) {
+          if (!profile.is_completed) {
+            showToast("You must complete your profile before you can post a job!", "warning");
+            window.location.href = "createClientProfile.html";
+          }
+        }
+      } catch (err) {
+        console.error("Error checking profile completeness:", err);
+      }
+    }
+
+    /* NAVIGATION */
+    function goDashboard() { window.location.href = "clientDashboard.html"; }
+    function goBrowse() { window.location.href = "browseTalent.html"; }
+    function goMessages() { window.location.href = "chat.html"; }
+    function goProfile() { window.location.href = "clientProfileView.html"; }
+
+    /* POST JOB */
+    async function apiPostJob(event) {
+      if (event) event.preventDefault();
+
+      const btn = document.querySelector(".post-btn");
+      const originalText = btn.innerText;
+
+      try {
+        const title = document.getElementById("shootTitle").value;
+        const date = document.getElementById("eventDate").value;
+        const location = document.getElementById("eventLocation").value;
+        const budget = document.getElementById("budget").value;
+
+        if (!title || !date || !location || !budget) {
+          showToast("Please fill all fields", "warning");
+          return;
+        }
+
+        const token = localStorage.getItem("access_token");
+        if (!token) {
+          showToast("You need to login first.", "error");
+          window.location.href = "login.html";
+          return;
+        }
+
+        btn.innerText = "Posting...";
+        btn.disabled = true;
+
+        const jobData = {
+          title: title,
+          location: location,
+          stipend: budget,
+          deadline: date,
+          status: 'Open'
+        };
+
+        const response = await fetch(`${window.CONFIG.API_BASE_URL}/api/jobs/`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+          },
+          body: JSON.stringify(jobData)
+        });
+
+        if (response.ok) {
+          sessionStorage.setItem('jobPosted', true);
+          window.location.assign("clientDashboard.html");
+        } else {
+          const errors = await response.json();
+          showToast("Failed to post job: " + JSON.stringify(errors), "error");
+          btn.innerText = originalText;
+          btn.disabled = false;
+        }
+      } catch (err) {
+        console.error("Error in apiPostJob:", err);
+        btn.innerText = originalText;
+        btn.disabled = false;
+      }
+    }
+
+    checkProfileCompleteness();
+  </script>
+
+</body>
+
+</html>

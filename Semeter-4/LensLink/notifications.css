@@ -1,0 +1,173 @@
+/* notifications.css - Modern Toast Notifications */
+
+.toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    pointer-events: none;
+}
+
+.toast {
+    pointer-events: auto;
+    min-width: 300px;
+    max-width: 450px;
+    background: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #f8fafc;
+    padding: 16px 20px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4), 0 8px 10px -6px rgba(0, 0, 0, 0.4);
+    animation: toast-slide-in 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    position: relative;
+    overflow: hidden;
+}
+
+.toast.hiding {
+    animation: toast-slide-out 0.3s ease forwards;
+}
+
+.toast-icon {
+    font-size: 1.25rem;
+    flex-shrink: 0;
+}
+
+.toast-content {
+    flex-grow: 1;
+    font-size: 0.95rem;
+    font-weight: 500;
+    line-height: 1.4;
+}
+
+.toast-close {
+    cursor: pointer;
+    font-size: 1.1rem;
+    color: #94a3b8;
+    transition: color 0.2s;
+    background: none;
+    border: none;
+    padding: 4px;
+    margin: -4px;
+    flex-shrink: 0;
+}
+
+.toast-close:hover {
+    color: #f1f5f9;
+}
+
+/* Toast Variants */
+.toast-success { border-left: 4px solid #10b981; }
+.toast-success .toast-icon { color: #10b981; }
+
+.toast-error { border-left: 4px solid #ef4444; }
+.toast-error .toast-icon { color: #ef4444; }
+
+.toast-info { border-left: 4px solid #3b82f6; }
+.toast-info .toast-icon { color: #3b82f6; }
+
+.toast-warning { border-left: 4px solid #f59e0b; }
+.toast-warning .toast-icon { color: #f59e0b; }
+
+/* Animations */
+@keyframes toast-slide-in {
+    from {
+        opacity: 0;
+        transform: translateX(100%) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+    }
+}
+
+@keyframes toast-slide-out {
+    from {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(50%) scale(0.8);
+    }
+}
+
+/* Progress bar */
+.toast-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.2);
+    width: 0%;
+    transition: width linear;
+}
+
+.toast-success .toast-progress  { background: #10b981; }
+.toast-error .toast-progress    { background: #ef4444; }
+.toast-info .toast-progress     { background: #3b82f6; }
+.toast-warning .toast-progress  { background: #f59e0b; }
+
+/* ── Confirm Toast ─────────────────────────────────────────── */
+
+.toast-confirm {
+    align-items: flex-start;
+}
+
+/* Wrap content + buttons in a column */
+.toast-body {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex-grow: 1;
+}
+
+.toast-confirm .toast-content {
+    font-size: 0.9rem;
+    color: #e2e8f0;
+    font-weight: 500;
+    line-height: 1.45;
+}
+
+.toast-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.toast-action-confirm,
+.toast-action-cancel {
+    border: none;
+    border-radius: 7px;
+    padding: 6px 14px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.15s, transform 0.1s;
+}
+
+.toast-action-confirm:hover,
+.toast-action-cancel:hover {
+    opacity: 0.85;
+    transform: translateY(-1px);
+}
+
+.toast-action-confirm {
+    background: #f59e0b;
+    color: #1a1100;
+}
+
+.toast-action-cancel {
+    background: rgba(255, 255, 255, 0.1);
+    color: #cbd5e1;
+}
+
+.toast-action-cancel:hover {
+    background: rgba(255, 255, 255, 0.18);
+}

@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>LensLink</title>
+<script src="config.js"></script>
+<script src="authGuard.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<link rel="stylesheet" href="notifications.css">
+<script src="notifications.js"></script>
+<style>
+/* ===============================
+   GLOBAL RESET
+================================ */
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Poppins',sans-serif;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  min-height:100vh;
+  background:linear-gradient(135deg,#020617,#0f172a,#020617);
+  color:white;
+
+  /* Scroll snapping (modern UX) */
+  scroll-snap-type:y mandatory;
+  overflow-y:scroll;
+}
+
+/* ===============================
+   FULL SCREEN SECTIONS
+================================ */
+section{
+  min-height:100svh; /* better than 100vh for mobile */
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  scroll-snap-align:start;
+  padding:80px 20px;
+}
+
+/* ===============================
+   NAVBAR
+================================ */
+.navbar{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:70px;     
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:0 60px;       
+  background:rgba(2,6,23,0.95);
+  border-bottom:1px solid #1e293b;
+  z-index:1000;
+}
+  .logo {
+      font-size: 1.6rem;
+      font-weight: bold;
+      color: #38bdf8;
+    }
+
+
+.login-btn{
+  padding:10px 22px;
+  background:linear-gradient(90deg,#38bdf8,#6366f1);
+  border:none;
+  border-radius:25px;
+  color:white;
+  font-weight:600;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.login-btn:hover{
+  opacity:0.85;
+}
+
+/* ===============================
+   HERO
+================================ */
+.hero{
+  text-align:center;
+  padding-top:120px;
+}
+
+.hero h1{
+  font-size:5rem;
+  letter-spacing:1px;
+  text-shadow:0 0 12px rgba(56,189,248,0.6);
+}
+
+.mainPara{
+  font-size:1.4rem;
+  color:#acb1b7;
+  margin-top:15px;
+}
+
+.hero-action{
+  margin-top:50px;
+  display:flex;
+  justify-content:center;
+}
+
+/* Dropdown container */
+/* Dropdown container */
+.dropdown{
+  position:relative;
+}
+
+/* Button */
+.get-started-btn{
+  padding:14px 35px;
+  font-size:1.1rem;
+  font-weight:600;
+  border:none;
+  border-radius:30px;
+  cursor:pointer;
+  background:linear-gradient(90deg,#38bdf8,#6366f1);
+  color:white;
+  transition:0.3s;
+}
+
+.get-started-btn:hover{
+  transform:scale(1.05);
+  box-shadow:0 0 20px rgba(56,189,248,0.5);
+}
+
+/* Dropdown menu */
+.dropdown-menu{
+  position:absolute;
+  top:120%;
+  left:50%;
+  transform:translateX(-50%) translateY(10px);
+  background:rgba(15,23,42,0.95);
+  backdrop-filter:blur(10px);
+  border:1px solid rgba(56,189,248,0.3);
+  border-radius:16px;
+  padding:10px;
+  width:250px;
+
+  opacity:0;
+  visibility:hidden;
+  transition:0.3s ease;
+  box-shadow:0 20px 40px rgba(0,0,0,0.5);
+}
+
+/* Show with animation */
+.dropdown:hover .dropdown-menu{
+  opacity:1;
+  visibility:visible;
+  transform:translateX(-50%) translateY(0);
+}
+
+/* Items */
+.dropdown-menu div{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:12px 14px;
+  border-radius:10px;
+  cursor:pointer;
+  transition:0.25s;
+  color:#cbd5f5;
+  font-size:0.95rem;
+}
+
+/* Hover effect */
+.dropdown-menu div:hover{
+  background:rgba(56,189,248,0.15);
+  color:#38bdf8;
+  transform:translateX(5px);
+}
+/* ===============================
+   HOW SECTION
+================================ */
+.how-section{
+  text-align:center;
+}
+
+.how-section h2{
+  font-size:36px;
+  margin-bottom:10px;
+}
+
+.how-section h2 span{
+  background:linear-gradient(90deg,#38bdf8,#6366f1);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.how-section p{
+  font-size: small;
+}
+.subtitle{
+  color:#94a3b8;
+  margin-bottom:40px;
+}
+
+.work-cards{
+  display:flex;
+  justify-content:center;
+  gap:30px;
+  flex-wrap:wrap;
+}
+
+.work-card{
+  background:#0f172a;
+  border:1px solid #38bdf8;
+  padding:35px;
+  border-radius:20px;
+  width:280px;
+  transition:0.3s;
+}
+
+.work-card:hover{
+  transform:translateY(-5px);
+}
+
+.work-card p{
+  color:#acb1b7;
+}
+
+.icon{
+  font-size:32px;
+  margin-bottom:15px;
+}
+
+/* ===============================
+   TESTIMONIAL
+================================ */
+.testimonial-section{
+  text-align:center;
+}
+
+.testimonial-section h2 span{
+  background:linear-gradient(90deg,#38bdf8,#6366f1);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+.testimonial-container{
+  background:#0f172a;
+  padding:50px;
+  border-radius:20px;
+  border:1px solid #38bdf8;
+  max-width:800px;
+  margin-top:40px;
+}
+
+.testimonial{
+  font-size:18px;
+}
+
+.author{
+  margin-top:20px;
+  color:#38bdf8;
+  font-weight:600;
+}
+
+/* ===============================
+   FOOTER
+================================ */
+.footer{
+  background:#020617;
+  padding:60px 10% 20px;
+  border-top:1px solid #1e293b;
+}
+
+.footer-container{
+  display:flex;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:40px;
+}
+
+.footer p{
+  color:#94a3b8;
+}
+
+.footer-bottom{
+  text-align:center;
+  margin-top:40px;
+  color:#64748b;
+}
+
+/* ===============================
+   RESPONSIVE
+================================ */
+
+/* Tablets */
+@media (max-width:1023px){
+
+  .hero h1{font-size:3rem;}
+  .mainPara{font-size:1.2rem;}
+
+  .card{width:220px;}
+  .work-card{width:240px;}
+
+}
+
+/* Mobile */
+@media (max-width:767px){
+
+  .navbar{
+    flex-direction:column;
+    gap:10px;
+    padding:12px 15px;
+  }
+
+  .hero h1{font-size:2.2rem;}
+  .mainPara{font-size:1rem;}
+
+  .hero-cards{
+    flex-direction:column;
+    align-items:center;
+  }
+
+  .card{
+    width:90%;
+  }
+
+  .work-cards{
+    flex-direction:column;
+    align-items:center;
+  }
+
+  .work-card{
+    width:90%;
+  }
+
+  .testimonial-container{
+    padding:30px 20px;
+  }
+
+  .footer-container{
+    flex-direction:column;
+  }
+
+}
+
+/* Small Mobile */
+@media (max-width:480px){
+
+  .hero h1{font-size:1.8rem;}
+  .mainPara{font-size:0.9rem;}
+
+}
+</style>
+<link rel="stylesheet" href="light-theme.css"></head>
+
+<body>
+
+<nav class="navbar">
+  <div class="logo">
+  LensLink<i class="fa-solid fa-camera-retro"></i>
+</div>
+  <div id="authContainer">
+    <button class="login-btn" onclick="goToLogin()">Login</button>
+  </div>
+</nav>
+
+<section class="hero">
+  <h1>LensLink<i class="fa-solid fa-camera-retro"></i></h1>
+  <p class="mainPara">Discover Student Photographers Near You</p>
+
+<div class="hero-action">
+  <div class="dropdown">
+    <button class="get-started-btn">Get Started</button>
+
+    <div class="dropdown-menu">
+      <div onclick="goToLogin('client')">Hire Photographer</div>
+      <div onclick="goToLogin('freelancer')">Join as Photographer</div>
+    </div>
+  </div>
+</div>
+</section>
+
+<section class="how-section">
+  <h2>How <span>LensLink</span> Works</h2>
+  <p class="subtitle">Getting started is easy. Find the perfect match in three simple steps.</p>
+
+  <div class="work-cards">
+    <div class="work-card">
+      <div class="icon blue"><i class="fa-solid fa-magnifying-glass" style="color: rgb(177, 151, 252);"></i></div>
+      <h3>Browse</h3>
+<p>Explore student photographers and view their portfolios.</p>
+    </div>
+
+    <div class="work-card">
+      <div class="icon purple"><i class="fa-solid fa-comment-dots" style="color: rgb(116, 192, 252);"></i></div>
+      <h3>Connect</h3>
+<p>Chat, discuss shoot details, and finalize pricing.</p>
+    </div>
+
+    <div class="work-card">
+      <div class="icon orange"><i class="fa-solid fa-camera" style="color: rgb(255, 212, 59);"></i></div>
+      <h3>Book & Shoot</h3>
+<p>Hire photographers and capture your moments.</p>
+    </div>
+  </div>
+</section>
+
+<section class="testimonial-section">
+  <h2>What Our <span>Community</span> Says</h2>
+  <div class="testimonial-container">
+    <div class="stars">⭐⭐⭐⭐⭐</div>
+    <div class="testimonial" id="testimonialText">
+      “I found an amazing Photographer within 2 days. The process was smooth and secure.”
+      <div class="author">— Rehan Ali</div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-container">
+    <div>
+      <h3>LensLink</h3>
+      <p>Connecting students with campus photographers for events and projects.</p>
+      <p>MUET, Jamshoro, Sindh</p>
+    </div>
+    <div>
+      <h4>Platform</h4>
+      <p>Browse Photographers</p>
+      <p>How It Works</p>
+      <p>Categories</p>
+    </div>
+    <div>
+      <h4>Legal</h4>
+      <p>Privacy Policy</p>
+      <p>Terms of Service</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    © 2026 LensLink. All rights reserved.
+  </div>
+</footer>
+
+<script>
+  function toggleOptions(){
+  const options = document.getElementById("roleOptions");
+
+  if(options.style.display === "flex"){
+    options.style.display = "none";
+  }else{
+    options.style.display = "flex";
+  }
+}
+function goToLogin(role){
+  if(role){
+    window.location.href = `login.html?role=${role}`;
+  }else{
+    window.location.href = "login.html";
+  }
+}
+
+const reviews = [
+{
+text:"I booked a photographer for my event within hours. Super smooth experience!",
+author:"— Sara Khan"
+},
+{
+text:"Got amazing photos for my university project. Highly recommended!",
+author:"— Ali Raza"
+},
+{
+text:"As a student photographer, I started getting clients easily through LensLink.",
+author:"— Ahmed Hassan"
+}
+];
+
+let index=0;
+
+setInterval(()=>{
+  index=(index+1)%reviews.length;
+  document.getElementById("testimonialText").innerHTML=
+  `"${reviews[index].text}"<div class="author">${reviews[index].author}</div>`;
+},4000);
+
+// Dynamic Auth UI
+(function() {
+  const authContainer = document.getElementById("authContainer");
+  const token = localStorage.getItem("access_token");
+  const role = localStorage.getItem("userRole");
+
+  if (token) {
+    const dashboardPage = role === "freelancer" ? "freelancerDashboard.html" : "clientDashboard.html";
+    authContainer.innerHTML = `
+      <div style="display: flex; gap: 15px;">
+        <button class="login-btn" onclick="window.location.href='${dashboardPage}'">Dashboard</button>
+        <button class="login-btn" onclick="logout()" style="background: #ef4444;">Logout</button>
+      </div>
+    `;
+  }
+})();
+</script>
+
+</body>
+</html>

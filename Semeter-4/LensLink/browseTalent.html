@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Browse Photographer</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <link rel="stylesheet" href="notifications.css">
+  <script src="notifications.js"></script>
+  <script src="config.js"></script>
+  <script src="authGuard.js"></script>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Segoe UI", sans-serif;
+      /* Firefox */
+      scrollbar-width: thin;
+      scrollbar-color: #38bdf8 #020617;
+    }
+
+    /* CUSTOM SCROLLBAR (Webkit) */
+    ::-webkit-scrollbar {
+      width: 7px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #020617;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #1e293b;
+      border-radius: 10px;
+      border: 1px solid #020617;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #38bdf8;
+    }
+
+    body {
+      background: #020617;
+      color: #e5e7eb;
+    }
+
+    /* NAVBAR */
+    .navbar {
+      height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      /* keep logo left & user right */
+      padding: 0 40px;
+      border-bottom: 1px solid rgba(56, 189, 248, 0.3);
+      position: relative;
+      /* for centering nav-links absolutely */
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 30px;
+      list-style: none;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .logo {
+      color: #38bdf8;
+      font-weight: bold;
+      font-size: 1.5rem;
+      cursor: pointer;
+      margin-right: 20px;
+    }
+
+    /* .nav-links{
+  display:flex;
+  gap:30px;
+  list-style:none;
+} */
+
+    .nav-links li {
+      cursor: pointer;
+      color: #cbd5f5;
+      font-size: larger;
+    }
+
+    .nav-links li:hover {
+      color: #38bdf8;
+    }
+
+    /* HEADER */
+    .header {
+      text-align: center;
+      padding: 50px 20px 30px;
+    }
+
+    .header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      color: #38bdf8;
+    }
+
+    .search-box {
+      max-width: 600px;
+      margin: 20px auto 0;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 14px 20px;
+      border-radius: 12px;
+      border: 1px solid rgba(56, 189, 248, 0.5);
+      background: rgba(15, 23, 42, 0.6);
+      color: white;
+      font-size: 1.1rem;
+      transition: 0.3s;
+    }
+
+    .search-box input:focus {
+      outline: none;
+      border-color: #38bdf8;
+      box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);
+    }
+
+    /* GRID */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      padding: 40px;
+    }
+
+    /* CARD */
+    .card {
+      background: linear-gradient(145deg, #0f172a, #020617);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      border-radius: 18px;
+      padding: 20px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .card:hover {
+      border-color: #38bdf8;
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.3);
+      transform: translateY(-5px);
+    }
+
+    .card-header {
+      cursor: pointer;
+      margin-bottom: 10px;
+    }
+
+    .name {
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: #38bdf8;
+    }
+
+    /* .name:hover{
+  text-decoration:underline;
+} */
+
+    .skill {
+      color: #aedfee;
+      margin: 6px 0 12px;
+    }
+
+    .department {
+      color: #94a3b8;
+    }
+
+    .price {
+      color: #38bdf8;
+      font-weight: bold;
+      margin-bottom: 12px;
+    }
+
+    .btn {
+      padding: 8px 14px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: 0.3s;
+    }
+
+    .view-profile {
+      background: transparent;
+      border: 1px solid #38bdf8;
+      color: #38bdf8;
+    }
+
+    .view-profile:hover {
+      background: #38bdf8;
+      color: #020617;
+    }
+
+    .save {
+      background: #38bdf8;
+      color: #020617;
+    }
+
+    .save:hover {
+      opacity: 0.8;
+    }
+
+    .message-btn {
+      background: #10b981;
+      color: white;
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    .message-btn:hover {
+      background: #059669;
+    }
+
+    .rating {
+      margin: 8px 0;
+      font-size: 20px;
+      color: #facc15;
+    }
+
+    .rating span {
+      color: #64748b;
+    }
+
+    .review-count {
+      font-size: 12px;
+      color: #94a3b8;
+      margin-left: 6px;
+    }
+
+    .loading {
+      grid-column: 1 / -1; /* Span entire grid width */
+      text-align: center;
+      padding: 60px 20px;
+      color: #cbd5f5;
+      font-size: 1.4rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .loading i {
+      color: #38bdf8;
+      font-size: 2.5rem;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .button-group .btn {
+      flex: 1;
+    }
+
+    .profile-avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      margin-bottom: 10px;
+      object-fit: cover;
+      background: #0f172a;
+    }
+
+    /* WORK GALLERY MODAL */
+    /* 
+.work-modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.9);
+  z-index:2000;
+  justify-content:center;
+  align-items:center;
+} */
+
+    /* .work-image{
+  max-width:80%;
+  max-height:80%;
+  border-radius:15px;
+  box-shadow:0 0 25px rgba(56,189,248,0.5);
+} */
+
+    /* .work-close{
+  position:absolute;
+  top:20px;
+  right:35px;
+  font-size:40px;
+  color:white;
+  cursor:pointer;
+} */
+
+    .work-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 40px;
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+      padding: 10px;
+    }
+
+    .work-prev {
+      left: 40px;
+    }
+
+    .work-next {
+      right: 40px;
+    }
+
+    .work-nav:hover,
+    .work-close:hover {
+      color: #38bdf8;
+    }
+
+    #mediaContainer {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      max-width: 80%;
+      max-height: 80%;
+    }
+
+    .work-image {
+      max-width: 100%;
+      max-height: 100%;
+      border-radius: 15px;
+    }
+
+    @media (max-width: 1024px) {
+      .grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+<link rel="stylesheet" href="light-theme.css"></head>
+
+<body>
+
+  <nav class="navbar">
+    <div class="logo" onclick="goHome()">LensLink<i class="fa-solid fa-camera-retro"></i></div>
+    <ul class="nav-links">
+      <li onclick="goDashboard()">Dashboard</li>
+      <li onclick="goMessage()">Messages</li>
+      <li onclick="goProfile()">Profile</li>
+    </ul>
+    <div class="user-name" id="navUserName"
+      style="margin-left:auto; margin-right:20px; color:white; font-weight:bold; cursor:pointer;" onclick="goProfile()">
+      Client</div>
+  </nav>
+
+  <section class="header">
+    <h1>Browse Photographers Around You</h1>
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="Search by name or Photography type (wedding, portrait, event) "
+        oninput="renderFreelancers()">
+    </div>
+  </section>
+
+  <section class="grid" id="freelancerGrid"></section>
+
+  <div id="loadMoreContainer" style="text-align: center; margin: 40px 0; display: none;">
+    <button id="loadMoreBtn" onclick="loadMore()"
+      style="background: #38bdf8; color: #020617; font-weight: bold; padding: 12px 30px; border: none; border-radius: 10px; cursor: pointer; transition: 0.3s;">
+      Load More Photographers
+    </button>
+  </div>
+  <!-- WORK GALLERY MODAL
+<div id="workModal" class="work-modal">
+  <span class="work-close">&times;</span>
+
+  <button class="work-nav work-prev">&#10094;</button>
+
+  <div id="mediaContainer"></div>
+
+  <button class="work-nav work-next">&#10095;</button>
+</div> -->
+
+  <script src="browseTalent.js">
+
+  </script>
+
+</body>
+
+</html>

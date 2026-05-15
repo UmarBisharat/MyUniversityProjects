@@ -1,0 +1,1555 @@
+/* =========================================
+   0. Global Font Fix (Icon-Safe)
+========================================= */
+/* 1. Apply Segoe UI to all text elements directly instead of using the * selector */
+body, h1, h2, h3, h4, p, span, a, button, input, textarea, select, li, div, label {
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif !important;
+}
+
+/* 2. Force FontAwesome to use its own required font files */
+i.fa-solid, i.fas {
+  font-family: "Font Awesome 6 Free" !important;
+  font-weight: 900 !important;
+}
+
+i.fa-regular, i.far {
+  font-family: "Font Awesome 6 Free" !important;
+  font-weight: 400 !important;
+}
+
+/* =========================================
+   0. Global Font Fix
+========================================= */
+/* Applies the font to everything EXCEPT FontAwesome icons */
+*:not(.fa-solid):not(.fa-regular):not(.fas):not(i) {
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif !important;
+}
+
+/* =========================================
+   light-theme.css (Premium "Soft UI" Theme)
+========================================= */
+
+/* 1. Global Background (Premium Soft Blue/Gray Gradient) */
+body, html, .dashboard-container, .container {
+  background: linear-gradient(135deg, #F0F4FF 0%, #E2E8F0 100%) !important;
+  background-attachment: fixed !important; /* Keeps gradient smooth when scrolling */
+  color: #1E293B !important;
+}
+
+/* 2. Navbar Styling (Frosted Glass Effect) */
+/* =========================================
+   2. Navbar Styling (Bulletproof Premium Fix)
+========================================= */
+.navbar, nav, #navbar {
+  background: rgba(255, 255, 255, 0.85) !important;
+  backdrop-filter: blur(12px) !important; 
+  -webkit-backdrop-filter: blur(12px) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3) !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05) !important;
+  
+  /* Forces the navbar to stay at the top and span the whole screen */
+  position: sticky !important; 
+  top: 0 !important;
+  width: 100% !important;
+  height: 70px !important;
+  z-index: 9999 !important; /* Prevents text from scrolling over it */
+}
+
+/* Forces the logo to be gradient blue */
+.logo, .logo i, .logo span {
+  background: linear-gradient(135deg, #2563EB, #3B82F6) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  font-weight: 800 !important;
+}
+
+/* Forces ALL links inside ANY navbar to be bold and dark */
+.navbar li, .navbar a, nav li, nav a, .nav-links li, .nav-links a, .profile-btn, .user-name {
+  color: #0F172A !important; 
+  font-weight: 600 !important;
+  font-size: 1.1rem !important; /* Forces the size to be completely uniform across all 20 pages */
+  text-decoration: none !important;
+  transition: color 0.2s ease !important;
+}
+
+/* Hover effect for navbar links */
+.navbar li:hover, .navbar a:hover, nav li:hover, nav a:hover, .profile-btn:hover {
+  color: #2563EB !important;
+}
+
+/* 3. Cards & Containers (Floating "Soft UI" Look) */
+.card, .big-card, .stat-card, .job-item, .modal, .dashboard-box,
+.dashboard-card, .verification-card, .box, .stat-box, .panel,
+.info-card, .dashboard-item, .freelancer-card, .job-card,
+div[id*="Requests"] > div, div[id*="Posts"] > div, div[id*="Orders"] > div,
+#savedFreelancers div {
+  background: #FFFFFF !important;
+  border: 1px solid rgba(255, 255, 255, 0.8) !important;
+  box-shadow: 0 10px 25px -5px rgba(148, 163, 184, 0.15), 0 8px 10px -6px rgba(148, 163, 184, 0.1) !important;
+  border-radius: 16px !important; /* Softer, modern corners */
+  transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+/* Add a subtle "lift" effect when hovering over cards */
+.card:hover, .stat-card:hover, .dashboard-card:hover, .job-card:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 20px 25px -5px rgba(148, 163, 184, 0.2), 0 10px 10px -5px rgba(148, 163, 184, 0.1) !important;
+}
+
+/* 4. Text & Typography */
+h1, h2, h3, h4, .welcome, .job-title, .verification-title, .job-header h3 {
+  color: #0F172A !important; 
+  font-weight: 700 !important;
+}
+.subtext, .job-info, p, .card p, .job-meta, .job-desc {
+  color: #64748B !important; 
+}
+
+/* 5. Highlight Numbers (Prices, Stat Counts) */
+.stat-card h1, .dashboard-card p, .box h1, .stat-box h1 {
+  color: #3B82F6 !important; 
+  font-weight: 800 !important;
+}
+.job-price {
+  color: #10B981 !important; 
+}
+
+/* 6. Buttons (Sleek Gradients) */
+button, .post-job-btn, .response-btn, .apply-btn, 
+button span, button i, button b, button strong {
+  background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%) !important;
+  color: #FFFFFF !important;
+  border: none !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.2) !important;
+  transition: all 0.2s ease !important;
+}
+button:hover, .post-job-btn:hover, .apply-btn:hover {
+  background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%) !important;
+  box-shadow: 0 6px 15px rgba(37, 99, 235, 0.3) !important;
+  transform: translateY(-1px) !important;
+}
+
+/* Specific Button Colors */
+.delete-btn, button[onclick="logout()"], .reject-btn {
+  background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%) !important;
+  box-shadow: 0 4px 10px rgba(239, 68, 68, 0.2) !important;
+}
+.confirm-btn {
+  background: linear-gradient(135deg, #10B981 0%, #059669 100%) !important;
+  box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2) !important;
+}
+#loadMoreBtn {
+  background: transparent !important;
+  color: #2563EB !important;
+  border: 2px solid #2563EB !important;
+  box-shadow: none !important;
+}
+#loadMoreBtn:hover {
+  background: rgba(37, 99, 235, 0.05) !important;
+}
+
+/* 7. Inputs & Forms */
+input, textarea, select {
+  background: #F8FAFC !important;
+  border: 1px solid #CBD5E1 !important; 
+  border-radius: 8px !important;
+  color: #0F172A !important;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+}
+input:focus, textarea:focus, select:focus {
+  border-color: #3B82F6 !important;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2) !important;
+  outline: none !important;
+}
+input::placeholder, textarea::placeholder {
+  color: #94A3B8 !important;
+}
+
+/* 8. Fix Spans & Icons */
+span, li, b, strong, label, td, th {
+  color: #475569 !important;
+}
+.skills-container span {
+  background: #F1F5F9 !important;
+  border: 1px solid #E2E8F0 !important;
+  border-radius: 20px !important; /* Pill shape for tags */
+}
+i.fa-solid, i.fa-regular, i.fas, i[style*="color: rgb(116, 192, 252)"] {
+  color: #3B82F6 !important; 
+}
+[style*="color: red"], [style*="color: #ef4444"], [style*="color: rgb"] {
+  color: #EF4444 !important; 
+}
+.avatar {
+  background: linear-gradient(135deg, #60A5FA, #2563EB) !important;
+}
+
+/* 9. Premium Scrollbar */
+::-webkit-scrollbar-track {
+  background: #F1F5F9 !important;
+}
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1 !important;
+  border: 2px solid #F1F5F9 !important;
+  border-radius: 10px !important;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8 !important;
+}
+
+/* =========================================
+   10. MODAL FIXES (browseTalent.html)
+========================================= */
+
+/* Make the pop-up gallery white and floating */
+.modal-content {
+  background: #FFFFFF !important;
+  color: #0F172A !important;
+  border: 1px solid rgba(255, 255, 255, 0.8) !important;
+  box-shadow: 0 25px 50px -12px rgba(148, 163, 184, 0.4) !important;
+  border-radius: 16px !important;
+}
+
+/* Fix the 'X' close button */
+.close-btn {
+  color: #94A3B8 !important;
+  text-shadow: none !important;
+}
+.close-btn:hover {
+  color: #EF4444 !important; /* Turns red when hovering to close */
+}
+
+/* =========================================
+   16. MESSAGES PAGE FIXES (chat.html)
+========================================= */
+
+/* Make the sidebar blend with the global gradient */
+.sidebar {
+  background: transparent !important;
+  border-right: 1px solid rgba(255, 255, 255, 0.6) !important;
+}
+
+/* Fix the sticky sidebar header */
+.sidebar h2 {
+  background: transparent !important;
+  color: #0F172A !important;
+  font-weight: 800 !important;
+}
+
+/* Style the individual conversation tabs */
+.conversation {
+  background: rgba(255, 255, 255, 0.6) !important;
+  border: 1px solid rgba(255, 255, 255, 0.8) !important;
+  color: #1E293B !important;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.02) !important;
+  transition: all 0.2s ease !important;
+  border-radius: 12px !important;
+}
+.conversation:hover {
+  background: #FFFFFF !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.05) !important;
+}
+
+/* Highlight the currently active chat */
+.conversation.active {
+  background: #FFFFFF !important;
+  border-left: 4px solid #2563EB !important;
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.1) !important;
+}
+
+/* Fix Chat Header and Input Area (Frosted Glass Effect) */
+.chat-header, .chat-input {
+  background: rgba(255, 255, 255, 0.85) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border-color: rgba(255, 255, 255, 0.5) !important;
+}
+
+/* Fix Chat Name Text */
+#chatName {
+  color: #0F172A !important;
+  font-weight: 700 !important;
+}
+
+/* Style the incoming messages (White Bubble, Dark Text) */
+.other {
+  background: #FFFFFF !important;
+  color: #1E293B !important;
+  border: 1px solid rgba(255, 255, 255, 0.8) !important;
+  box-shadow: 0 6px 15px rgba(148, 163, 184, 0.15) !important;
+  border-bottom-left-radius: 4px !important; /* Creates the "speech bubble" tail */
+}
+
+/* Style your outgoing messages (Premium Blue Gradient Bubble) */
+.me {
+  background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%) !important;
+  color: #FFFFFF !important;
+  border: none !important;
+  box-shadow: 0 6px 15px rgba(37, 99, 235, 0.25) !important;
+  border-bottom-right-radius: 4px !important;
+}
+
+/* Fix Message Input Field */
+.chat-input input {
+  background: rgba(255, 255, 255, 0.9) !important;
+  color: #0F172A !important;
+  border: 1px solid #CBD5E1 !important;
+  border-radius: 12px !important;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.02) !important;
+}
+.chat-input input:focus {
+  background: #FFFFFF !important;
+  border-color: #3B82F6 !important;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2) !important;
+}
+
+/* =========================================
+   17. CLIENT PROFILE VIEW (clientProfileView.html)
+========================================= */
+
+/* Frosted Glass Effect for Profile Header and Action Bar */
+.profile-header, .action-bar {
+  background: rgba(255, 255, 255, 0.85) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.8) !important;
+  box-shadow: 0 10px 25px -5px rgba(148, 163, 184, 0.15) !important;
+  border-radius: 16px !important;
+}
+
+/* Fix Profile Name and Role Text */
+.profile-header .name {
+  color: #0F172A !important; /* Dark Slate for the Name */
+  font-weight: 800 !important;
+}
+.profile-header .role {
+  color: #64748B !important; /* Soft Gray for "Client Profile" */
+  font-weight: 600 !important;
+}
+
+/* Premium "Active Client" Badge */
+.profile-header [style*="color: #10b981"] {
+  color: #10B981 !important; /* Vibrant Green text */
+  background: #ECFDF5 !important; /* Soft green background pill */
+  padding: 6px 14px !important;
+  border-radius: 20px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  font-weight: 600 !important;
+  border: 1px solid rgba(16, 185, 129, 0.2) !important;
+}
+
+/* Fix Info Grid Labels and Values */
+.info-card .label {
+  color: #64748B !important; /* Medium gray for labels like "Company Name" */
+  font-size: 0.9rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  margin-bottom: 8px !important;
+}
+.info-card .value {
+  color: #0F172A !important; /* Dark, bold text for the actual data */
+  font-weight: 700 !important;
+  font-size: 1.1rem !important;
+}
+
+/* Edit Profile Button */
+.edit-btn {
+  background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%) !important;
+  color: #FFFFFF !important;
+  border: none !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.2) !important;
+  font-weight: 600 !important;
+  transition: all 0.2s ease !important;
+}
+.edit-btn:hover {
+  background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 15px rgba(37, 99, 235, 0.3) !important;
+}
+
+/* =========================================
+   18. PROFILE CREATION & AUTH FORMS 
+   (createClientProfile, Login, Signup)
+========================================= */
+
+/* Turn the container into a floating Glass Card ONLY on pages without a navbar */
+body:not(:has(.navbar)) .container {
+  background: rgba(255, 255, 255, 0.85) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.8) !important;
+  box-shadow: 0 10px 25px -5px rgba(148, 163, 184, 0.15), 0 8px 10px -6px rgba(148, 163, 184, 0.1) !important;
+  border-radius: 24px !important;
+  padding: 40px !important;
+}
+
+/* Make Form Headings Pop */
+body:not(:has(.navbar)) .container h1 {
+  background: linear-gradient(135deg, #2563EB, #3B82F6) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  font-weight: 800 !important;
+  font-size: 2.2rem !important;
+  margin-bottom: 25px !important;
+}
+
+/* Fix Labels */
+label {
+  color: #1E293B !important; /* Dark Slate */
+  font-weight: 700 !important;
+  font-size: 0.95rem !important;
+  margin-bottom: 6px !important;
+}
+
+/* Adjust Input Spacing */
+input, textarea {
+  margin-bottom: 15px !important;
+  padding: 14px 18px !important;
+}
+
+/* Premium Styling for File Upload Button */
+/* =========================================
+   PREMIUM FILE UPLOAD STYLING
+========================================= */
+
+/* Transforms the entire input box into a sleek dashed dropzone */
+input[type="file"] {
+  background: #F8FAFC !important;
+  border: 2px dashed #CBD5E1 !important; 
+  padding: 12px 16px !important;
+  border-radius: 12px !important;
+  color: #64748B !important; /* Softens the "No file chosen" text */
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  display: block !important;
+  width: 100% !important;
+}
+
+/* Hover effect for the whole dropzone */
+input[type="file"]:hover {
+  border-color: #3B82F6 !important;
+  background: #FFFFFF !important;
+}
+
+/* Upgrades the actual "Choose File" button to a premium blue pill */
+input[type="file"]::file-selector-button {
+  background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%) !important;
+  color: #FFFFFF !important;
+  border: none !important;
+  padding: 8px 18px !important;
+  border-radius: 8px !important;
+  margin-right: 15px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.2) !important;
+  transition: all 0.2s ease !important;
+}
+
+input[type="file"]::file-selector-button:hover {
+  background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%) !important;
+  box-shadow: 0 6px 15px rgba(37, 99, 235, 0.3) !important;
+  transform: translateY(-1px) !important;
+}
+
+  /* Fix the top header banner (Find Events and Earn) */
+.header {
+  background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%) !important;
+  color: #FFFFFF !important;
+  padding: 40px 20px !important;
+  border-radius: 16px !important;
+  margin: 20px auto 30px auto !important; /* Adds space so it doesn't touch the navbar */
+  max-width: 95% !important;
+  box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.3) !important;
+}
+.header h1 {
+  color: #FFFFFF !important; /* Keeps the banner text white */
+  font-weight: 800 !important;
+}
+
+/* =========================================
+   19. FREELANCER MULTI-STEP PROFILE CREATION 
+   (createProfile.html)
+========================================= */
+
+/* Turn each form step into a premium glass card */
+.step {
+  background: rgba(255, 255, 255, 0.85) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.8) !important;
+  box-shadow: 0 10px 25px -5px rgba(148, 163, 184, 0.15), 0 8px 10px -6px rgba(148, 163, 184, 0.1) !important;
+  border-radius: 24px !important;
+  padding: 40px !important;
+}
+
+/* Step Headings (Gradient Blue) */
+.step h2 {
+  background: linear-gradient(135deg, #2563EB, #3B82F6) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  font-weight: 800 !important;
+  font-size: 2rem !important;
+  margin-bottom: 25px !important;
+  text-align: center !important;
+}
+
+/* The "Back" arrow button */
+.back {
+  color: #64748B !important; /* Professional medium gray */
+  font-weight: 800 !important;
+  font-size: 1.5rem !important;
+  transition: color 0.2s ease !important;
+  margin-top: 15px !important;
+}
+.back:hover {
+  color: #0F172A !important; /* Turns dark slate when hovered */
+}
+
+/* Skills Grid Items */
+.skill-item {
+  background: #F8FAFC !important;
+  color: #475569 !important;
+  border: 1px solid #CBD5E1 !important;
+  border-radius: 12px !important;
+  font-weight: 600 !important;
+  transition: all 0.2s ease !important;
+}
+.skill-item:hover {
+  border-color: #3B82F6 !important;
+  background: #FFFFFF !important;
+}
+
+/* When a skill is selected */
+.skill-item.selected {
+  background: linear-gradient(135deg, #3B82F6, #2563EB) !important;
+  color: #FFFFFF !important;
+  border: none !important;
+  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3) !important;
+}
+
+/* Photo Upload Previews */
+.photo-item {
+  border: 2px dashed #CBD5E1 !important;
+  background: #F1F5F9 !important;
+  border-radius: 12px !important;
+}
+
+/* =========================================
+   20. FREELANCER SHOOTS/PROJECTS PAGE 
+   (freelancerProjects.html)
+========================================= */
+
+/* Fix the Page Title */
+.page-title {
+  color: #0F172A !important;
+  font-weight: 800 !important;
+  margin-bottom: 30px !important;
+}
+
+/* Ensure the dynamically loaded project cards look premium */
+.projects-grid > div {
+  background: rgba(255, 255, 255, 0.85) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.8) !important;
+  box-shadow: 0 10px 25px -5px rgba(148, 163, 184, 0.15) !important;
+  border-radius: 16px !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+}
+.projects-grid > div:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 15px 30px -5px rgba(148, 163, 184, 0.2) !important;
+}
+
+/* =========================================
+   MODAL (POPUP) STYLING 
+========================================= */
+
+/* The dark transparent background behind the popup */
+.submit-modal {
+  background: rgba(15, 23, 42, 0.4) !important; /* Soft dark overlay */
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+}
+
+/* The Modal Box Itself */
+.submit-box {
+  background: #FFFFFF !important;
+  border: 1px solid rgba(255, 255, 255, 0.8) !important;
+  box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.25) !important;
+  border-radius: 24px !important;
+  padding: 30px !important;
+}
+
+/* Modal Title */
+.submit-box h3 {
+  color: #0F172A !important;
+  font-weight: 800 !important;
+  font-size: 1.5rem !important;
+  margin-bottom: 20px !important;
+}
+
+/* Modal Labels */
+.submit-box label {
+  color: #475569 !important;
+  font-weight: 600 !important;
+  margin-bottom: 8px !important;
+  display: block !important;
+}
+
+/* Cancel Button inside Modal */
+.submit-box button[onclick="closeSubmitModal()"] {
+  background: #F1F5F9 !important; /* Soft gray for cancel */
+  color: #475569 !important;
+  box-shadow: none !important;
+}
+.submit-box button[onclick="closeSubmitModal()"]:hover {
+  background: #E2E8F0 !important;
+  color: #0F172A !important;
+}
+
+/* =========================================
+   21. LOGIN & SIGNUP ICON FIX (UPDATED)
+========================================= */
+
+/* 1. Aggressively force left padding to clear the icons */
+input[type="email"], 
+input[type="password"],
+input[placeholder*="Email" i],
+input[placeholder*="Password" i],
+input[placeholder*="Username" i] {
+  padding-left: 45px !important;
+  margin-bottom: 0 !important;
+}
+
+/* 2. Lock the input wrapper so icons don't float away */
+form div, .input-box {
+  position: relative !important;
+  margin-bottom: 15px !important;
+}
+
+/* 3. Lock the icons perfectly on the left side */
+form i.fa-envelope, form i.fa-lock, form i.fa-user,
+.input-box i {
+  position: absolute !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  left: 16px !important;
+  color: #94A3B8 !important; 
+  font-size: 1.1rem !important;
+  pointer-events: none !important; 
+  z-index: 10 !important;
+}
+
+/* 4. Focus effect: icon turns blue when typing */
+form div:focus-within i, .input-box:focus-within i {
+  color: #2563EB !important;
+}
+
+/* =========================================
+   22. JOB RESPONSES PAGE (jobResponses.html)
+========================================= */
+
+/* Make the response cards match the premium floating glass effect */
+.response-card {
+  background: rgba(255, 255, 255, 0.85) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.8) !important;
+  box-shadow: 0 10px 25px -5px rgba(148, 163, 184, 0.15), 0 8px 10px -6px rgba(148, 163, 184, 0.1) !important;
+  border-radius: 16px !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+/* Hover effect to lift the card slightly */
+.response-card:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 15px 30px -5px rgba(148, 163, 184, 0.2) !important;
+}
+
+/* Fix text colors inside the card */
+.response-header strong, .response-header h3 {
+  color: #0F172A !important; /* Dark bold name */
+  font-weight: 800 !important;
+}
+.response-body {
+  color: #475569 !important; /* Medium gray for the message/email */
+}
+
+/* Override the JS-injected dark blue tags (like Date and Budget) */
+.response-body span[style*="background: rgba(56,189,248,0.1)"] {
+  background: #F1F5F9 !important; /* Soft gray pill */
+  color: #2563EB !important; /* Premium blue text */
+  border: 1px solid #CBD5E1 !important;
+  font-weight: 600 !important;
+}
+
+/* Restyle the "View Portfolio" secondary button */
+.response-card button[onclick*="viewPortfolio"] {
+  background: transparent !important;
+  color: #2563EB !important;
+  border: 2px solid #2563EB !important;
+  box-shadow: none !important;
+  font-weight: 600 !important;
+}
+.response-card button[onclick*="viewPortfolio"]:hover {
+  background: rgba(37, 99, 235, 0.05) !important;
+}
+
+/* =========================================
+   23. LANDING PAGE FIXES (index.html)
+========================================= */
+
+/* Fix Hero Heading & Remove Dark Mode Glow */
+.hero h1 {
+  color: #0F172A !important;
+  text-shadow: none !important; /* Removes the old neon blue shadow */
+}
+.mainPara, .subtitle {
+  color: #475569 !important; /* Professional medium gray */
+  font-weight: 500 !important;
+}
+
+/* Dropdown Menu (Get Started -> Hire / Join) */
+.dropdown-menu {
+  background: rgba(255, 255, 255, 0.95) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border: 1px solid #E2E8F0 !important;
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.1) !important;
+}
+.dropdown-menu div {
+  color: #1E293B !important; /* Dark text for dropdown options */
+  font-weight: 600 !important;
+}
+.dropdown-menu div:hover {
+  background: #F1F5F9 !important;
+  color: #2563EB !important;
+}
+
+/* "How it Works" and Testimonial Cards */
+.work-card, .testimonial-container {
+  background: rgba(255, 255, 255, 0.85) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.8) !important;
+  box-shadow: 0 10px 25px -5px rgba(148, 163, 184, 0.15) !important;
+}
+.work-card:hover {
+  box-shadow: 0 20px 30px -5px rgba(148, 163, 184, 0.2) !important;
+}
+
+/* Fix text inside cards & section titles */
+.work-card h3, .testimonial-section h2, .how-section h2 {
+  color: #0F172A !important;
+}
+.work-card p, .testimonial {
+  color: #475569 !important;
+  font-weight: 500 !important;
+}
+
+/* Testimonial Author */
+.author {
+  color: #2563EB !important;
+  font-weight: 800 !important;
+}
+
+/* Footer Fixes */
+.footer {
+  background: #FFFFFF !important;
+  border-top: 1px solid #E2E8F0 !important;
+}
+.footer h3, .footer h4 {
+  color: #0F172A !important;
+  margin-bottom: 15px !important;
+}
+.footer p, .footer-bottom {
+  color: #64748B !important;
+}
+
+/* =========================================
+   24. LOGIN & SIGNUP PAGES (login.html, register.html)
+========================================= */
+
+/* Remove the dark-mode ambient grid and glowing background */
+body::before, body::after {
+  display: none !important;
+}
+
+/* Fix Brand Section (Left Side) */
+.brand-logo {
+  color: #0F172A !important; /* Dark Slate */
+}
+.brand-tag, .brand-desc {
+  color: #475569 !important; /* Professional medium gray */
+  font-weight: 500 !important;
+}
+.pill {
+  background: #F1F5F9 !important;
+  color: #2563EB !important; /* Premium Blue */
+  border: 1px solid #CBD5E1 !important;
+  font-weight: 600 !important;
+}
+
+/* The Login/Signup Card */
+.page-wrapper .card {
+  background: rgba(255, 255, 255, 0.85) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.8) !important;
+  box-shadow: 0 20px 40px -10px rgba(15, 23, 42, 0.1) !important;
+}
+
+/* Text inside the card */
+.card-title {
+  color: #0F172A !important;
+}
+.card-sub {
+  color: #64748B !important;
+}
+
+/* Form Fields Fixes */
+.field label {
+  color: #1E293B !important;
+  font-weight: 700 !important;
+}
+.input-wrap input {
+  background: #FFFFFF !important;
+  color: #0F172A !important;
+  border: 1px solid #CBD5E1 !important;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.02) !important;
+}
+.input-wrap input:focus {
+  background: #FFFFFF !important;
+  border-color: #3B82F6 !important;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2) !important;
+}
+
+/* Ensure icons stay visible and colored correctly */
+.input-wrap i {
+  color: #94A3B8 !important;
+}
+.input-wrap:focus-within i {
+  color: #2563EB !important; /* Lights up blue when typing */
+}
+
+/* Dividers and Bottom Links */
+.divider {
+  color: #94A3B8 !important;
+}
+.divider::before, .divider::after {
+  background: #E2E8F0 !important; /* Light gray lines next to "or" */
+}
+.switch {
+  color: #475569 !important;
+}
+
+/* =========================================
+   25. ADMIN DASHBOARD FIXES (adminDashboard.html)
+========================================= */
+
+/* 1. Fix the Tabs (Disputes / Manage Users) */
+.tabs {
+  border-bottom: 1px solid #CBD5E1 !important;
+}
+.tab {
+  color: #64748B !important; /* Medium slate gray so it is visible */
+  font-weight: 600 !important;
+}
+.tab:hover {
+  color: #0F172A !important; /* Turns dark on hover */
+}
+.tab.active {
+  color: #2563EB !important; /* Premium Blue for the active tab */
+  border-bottom-color: #2563EB !important;
+}
+
+/* 2. Fix the "Financial Mediation Portal" text */
+.navbar div[style*="color: #94a3b8"] {
+  color: #475569 !important; /* Darker slate gray for readability */
+  font-weight: 700 !important;
+  letter-spacing: 0.5px !important;
+}
+
+/* 3. Fix the Messages Button in the Header */
+.navbar .btn-secondary {
+  background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%) !important;
+  color: #FFFFFF !important;
+  border: none !important;
+  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.2) !important;
+}
+.navbar .btn-secondary i {
+  color: #FFFFFF !important; /* Forces the message icon to be white */
+}
+
+/* 4. Fix the User Search Bar */
+#userSearchInput {
+  background: #FFFFFF !important;
+  color: #0F172A !important;
+  border: 1px solid #CBD5E1 !important;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.02) !important;
+}
+#userSearchInput::placeholder {
+  color: #94A3B8 !important;
+}
+#userSearchContainer i {
+  color: #64748B !important;
+}
+
+/* 5. Fix Admin Cards and Empty State Text */
+.card-title {
+  color: #0F172A !important;
+}
+.info-row {
+  color: #475569 !important;
+}
+.info-item b {
+  color: #0F172A !important;
+}
+.empty-state {
+  color: #64748B !important;
+  font-weight: 500 !important;
+}
+
+/* =========================================
+   26. MY BOOKINGS / ORDERS PAGE (order.html)
+========================================= */
+
+/* Page Title */
+.title {
+  color: #0F172A !important;
+  font-weight: 800 !important;
+}
+
+/* Order Cards (Premium Floating Style) */
+.order-card {
+  background: rgba(255, 255, 255, 0.85) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.8) !important;
+  box-shadow: 0 10px 25px -5px rgba(148, 163, 184, 0.15) !important;
+  border-radius: 16px !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+}
+.order-card:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 15px 30px -5px rgba(148, 163, 184, 0.2) !important;
+}
+
+/* Card Text */
+.order-title {
+  color: #0F172A !important;
+  font-weight: 700 !important;
+}
+.order-info {
+  color: #475569 !important;
+}
+
+/* Premium Status Badges (Pill style) */
+.status {
+  padding: 6px 14px !important;
+  border-radius: 20px !important;
+  font-weight: 600 !important;
+  display: inline-block !important;
+}
+.status.pending {
+  background: #FEF3C7 !important; /* Soft Amber background */
+  color: #D97706 !important; /* Dark Amber text */
+}
+.status.progress {
+  background: #DBEAFE !important; /* Soft Blue */
+  color: #2563EB !important; /* Dark Blue */
+}
+.status.delivered {
+  background: #D1FAE5 !important; /* Soft Green */
+  color: #059669 !important; /* Dark Green */
+}
+.status.rejected {
+  background: #FEE2E2 !important; /* Soft Red */
+  color: #DC2626 !important; /* Dark Red */
+}
+
+/* =========================================
+   REVIEW & SUBMIT MODALS
+========================================= */
+
+/* Modals Backdrop (Frosted Blur) */
+.review-modal, .submit-modal {
+  background: rgba(15, 23, 42, 0.4) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+}
+
+/* Modal Boxes */
+.review-box, .submit-box {
+  background: #FFFFFF !important;
+  border: 1px solid rgba(255, 255, 255, 0.8) !important;
+  box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.25) !important;
+  border-radius: 24px !important;
+}
+
+/* Modal Text */
+.review-box h3, .submit-box h3 {
+  color: #0F172A !important;
+  font-weight: 800 !important;
+}
+.review-box label, .submit-box label {
+  color: #475569 !important;
+  font-weight: 600 !important;
+}
+
+/* Star Rating System */
+.star {
+  color: #CBD5E1 !important; /* Premium light gray for empty stars */
+}
+.star:hover, .star.active {
+  color: #F59E0B !important; /* Bright Gold for filled stars */
+  text-shadow: 0 2px 10px rgba(245, 158, 11, 0.3) !important; /* Slight glow */
+}
+
+/* Override inline dark inputs inside modals */
+.review-box textarea, .submit-box textarea, .submit-box input {
+  background: #F8FAFC !important;
+  color: #0F172A !important;
+  border: 1px solid #CBD5E1 !important;
+  border-radius: 12px !important;
+}
+.review-box textarea:focus, .submit-box textarea:focus, .submit-box input:focus {
+  border-color: #3B82F6 !important;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2) !important;
+  outline: none !important;
+}
+
+/* Cancel Buttons inside Modals */
+.review-box button[onclick*="close"], .submit-box button[onclick*="close"] {
+  background: #F1F5F9 !important;
+  color: #475569 !important;
+  box-shadow: none !important;
+}
+.review-box button[onclick*="close"]:hover, .submit-box button[onclick*="close"]:hover {
+  background: #E2E8F0 !important;
+  color: #0F172A !important;
+}
+
+/* =========================================
+   27. PLACE ORDER PAGE (placeOrder.html)
+========================================= */
+
+/* The Main Order Card */
+#orderCard {
+  background: rgba(255, 255, 255, 0.85) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.8) !important;
+  box-shadow: 0 10px 25px -5px rgba(148, 163, 184, 0.15), 0 8px 10px -6px rgba(148, 163, 184, 0.1) !important;
+  border-radius: 24px !important;
+}
+
+/* Page Heading */
+#orderCard h2 {
+  background: linear-gradient(135deg, #2563EB, #3B82F6) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  font-weight: 800 !important;
+}
+
+/* Fix Labels & Inputs */
+#orderCard label {
+  color: #1E293B !important; /* Dark Slate */
+}
+#orderCard input {
+  background: #F8FAFC !important;
+  color: #0F172A !important;
+  border: 1px solid #CBD5E1 !important;
+  border-radius: 12px !important;
+}
+#orderCard input:focus {
+  border-color: #3B82F6 !important;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2) !important;
+}
+
+/* =========================================
+   SUCCESS ISLAND MODAL FIXES
+========================================= */
+
+/* Modal Backdrop */
+.island-overlay {
+  background: rgba(15, 23, 42, 0.4) !important; /* Soft dark blur */
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+}
+
+/* The Popup Box */
+.island-box {
+  background: #FFFFFF !important;
+  border: 1px solid rgba(255, 255, 255, 0.8) !important;
+  box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.25) !important;
+}
+
+/* Modal Text */
+.island-title {
+  color: #0F172A !important;
+}
+.island-sub {
+  color: #475569 !important;
+}
+
+/* Order ID Display Box */
+.island-order-id {
+  background: #F1F5F9 !important; /* Clean light gray box */
+  border: 1px solid #E2E8F0 !important;
+  color: #64748B !important;
+}
+.island-order-id strong {
+  color: #2563EB !important; /* Blue text for the actual ID */
+  font-weight: 800 !important;
+}
+
+/* Secondary "Back to Dashboard" Button */
+.island-buttons .btn-secondary {
+  background: #FFFFFF !important;
+  color: #2563EB !important;
+  border: 2px solid #2563EB !important;
+  font-weight: 600 !important;
+}
+.island-buttons .btn-secondary:hover {
+  background: rgba(37, 99, 235, 0.05) !important;
+}
+
+/* =========================================
+   28. POST JOB PAGE (postJob.html)
+========================================= */
+
+/* Ensure the Post Job Card gets the floating glass effect */
+.container .card {
+  background: rgba(255, 255, 255, 0.85) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.8) !important;
+  box-shadow: 0 10px 25px -5px rgba(148, 163, 184, 0.15), 0 8px 10px -6px rgba(148, 163, 184, 0.1) !important;
+  border-radius: 24px !important;
+  padding: 40px !important;
+}
+
+/* Page Heading inside the card */
+.card h2 {
+  background: linear-gradient(135deg, #2563EB, #3B82F6) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  font-weight: 800 !important;
+  font-size: 2rem !important;
+  margin-bottom: 25px !important;
+}
+
+/* Form Labels */
+.input-group label {
+  color: #1E293B !important; /* Dark Slate */
+  font-weight: 700 !important;
+  font-size: 0.95rem !important;
+  margin-bottom: 8px !important;
+}
+
+/* Inputs & Textareas */
+.input-group input, .input-group textarea {
+  background: #F8FAFC !important;
+  color: #0F172A !important;
+  border: 1px solid #CBD5E1 !important;
+  border-radius: 12px !important;
+  padding: 14px 16px !important;
+  transition: all 0.2s ease !important;
+}
+.input-group input:focus, .input-group textarea:focus {
+  border-color: #3B82F6 !important;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2) !important;
+  outline: none !important;
+}
+
+/* The "Post Job" Button */
+.post-btn {
+  background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%) !important;
+  color: #FFFFFF !important;
+  font-size: 1.1rem !important;
+  padding: 14px !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.2) !important;
+  margin-top: 20px !important;
+  transition: all 0.2s ease !important;
+}
+.post-btn:hover {
+  background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%) !important;
+  box-shadow: 0 6px 15px rgba(37, 99, 235, 0.3) !important;
+  transform: translateY(-2px) !important;
+}
+
+/* =========================================
+   29. FREELANCER PROFILE VIEW (profile-view.html)
+========================================= */
+
+/* Profile Header (Frosted Glass Effect) */
+.profile-header {
+  background: rgba(255, 255, 255, 0.85) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.8) !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Header Text Fixes */
+.profile-info h2 {
+  color: #0F172A !important; /* Dark Slate for Name */
+  font-weight: 800 !important;
+}
+.profile-info p, #reputationStats {
+  color: #64748B !important; /* Medium Gray for subtitle/stats */
+  font-weight: 600 !important;
+}
+
+/* Section Headings & Text */
+.section h3 {
+  color: #2563EB !important; /* Keeps the premium blue accent */
+  border-left-color: #2563EB !important;
+}
+.section p, .empty-state {
+  color: #475569 !important; /* Professional medium gray */
+  font-weight: 500 !important;
+}
+
+/* Edit Mode Inputs & Textareas */
+input, textarea {
+  background: #F8FAFC !important;
+  color: #0F172A !important;
+  border: 1px solid #CBD5E1 !important;
+}
+input:focus, textarea:focus {
+  border-color: #3B82F6 !important;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2) !important;
+}
+
+/* Portfolio Work Cards */
+.work-card {
+  background: #FFFFFF !important;
+  border: 1px solid #E2E8F0 !important;
+  border-radius: 16px !important;
+  box-shadow: 0 10px 25px -5px rgba(148, 163, 184, 0.15) !important;
+}
+.work-card:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 15px 30px -5px rgba(148, 163, 184, 0.2) !important;
+  border-color: #3B82F6 !important;
+}
+
+/* Edit / Save Buttons */
+.edit-btn {
+  background: transparent !important;
+  color: #2563EB !important;
+  border: 2px solid #2563EB !important;
+}
+.edit-btn:hover {
+  background: rgba(37, 99, 235, 0.05) !important;
+}
+.save-btn {
+  background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%) !important;
+  color: #FFFFFF !important;
+  border: none !important;
+  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.2) !important;
+}
+
+/* Incomplete Profile Alert Banner */
+.incomplete-alert-container {
+  background: #FFFFFF !important;
+  border: 1px solid #93C5FD !important; /* Soft blue border */
+  box-shadow: 0 10px 25px -5px rgba(148, 163, 184, 0.15) !important;
+}
+.incomplete-alert-text {
+  color: #0F172A !important;
+  font-weight: 700 !important;
+}
+.incomplete-alert-text span {
+  color: #475569 !important;
+}
+
+/* =========================================
+   30. REGISTER / SIGNUP PAGE (register.html)
+========================================= */
+
+/* Overwrite the Body Background */
+body:has(.left):has(.right) {
+  background: #F8FAFC !important; 
+}
+
+/* 1. Left Panel (Vibrant Premium Blue Gradient) */
+/* 1. Left Panel (Deep, Rich Premium Navy Gradient) */
+.left {
+  background: linear-gradient(145deg, #0F172A 0%, #1E3A8A 100%) !important; /* Dark Slate to Deep Navy */
+  border-right: none !important;
+  position: relative !important;
+}
+
+/* Force ALL parts of the logo to be pure white and sit on top of the background */
+.left .logo, 
+.left .logo span, 
+.left .logo i {
+  color: #FFFFFF !important;
+  opacity: 1 !important;
+  z-index: 99 !important; /* Pushes the logo above any background glare */
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3) !important; /* Adds a tiny shadow for perfect readability */
+}
+
+/* Force all text & icons on the left to be crisp white */
+.left-headline, .left-headline em, .left-desc, .feature {
+  color: #FFFFFF !important;
+}
+.left-tag {
+  border-color: rgba(255, 255, 255, 0.3) !important;
+  color: #FFFFFF !important;
+}
+.left-tag::before {
+  background: #FFFFFF !important; 
+}
+.feature-dot {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+  color: #FFFFFF !important;
+}
+.left-foot {
+  color: rgba(255, 255, 255, 0.6) !important;
+}
+
+/* 2. Right Panel (Light Form UI) */
+.right {
+  background: #F8FAFC !important;
+}
+
+/* Form Headings */
+.step-title { color: #0F172A !important; }
+.step-sub { color: #64748B !important; }
+
+/* 3. Step Progress Indicator */
+.step-node { color: #94A3B8 !important; }
+.step-node.active { color: #0F172A !important; }
+.step-node.done { color: #2563EB !important; }
+
+.step-node.active .step-circle {
+  background: #2563EB !important;
+  border-color: #2563EB !important;
+  color: #FFFFFF !important;
+}
+.step-node.done .step-circle {
+  background: #DBEAFE !important;
+}
+.step-line { background: #E2E8F0 !important; }
+.step-line.done { background: #2563EB !important; }
+
+/* 4. Form Inputs */
+.field-label {
+  color: #1E293B !important;
+}
+.field-input {
+  background: #FFFFFF !important;
+  color: #0F172A !important;
+  border: 1px solid #CBD5E1 !important;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.02) !important;
+}
+.field-input::placeholder {
+  color: #94A3B8 !important;
+}
+.field-input:focus {
+  background: #FFFFFF !important;
+  border-color: #3B82F6 !important;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2) !important;
+}
+
+/* Fix dropdown options blending in */
+select.field-input option {
+  background: #FFFFFF !important;
+  color: #0F172A !important;
+}
+
+/* 5. Buttons */
+.otp-btn {
+  background: #F1F5F9 !important;
+  border: 1px solid #CBD5E1 !important;
+  color: #2563EB !important;
+}
+.otp-btn:hover:not(:disabled) {
+  background: #E2E8F0 !important;
+}
+.right .btn-primary {
+  background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%) !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.2) !important;
+}
+
+/* Bottom Footer Text */
+.form-foot { color: #64748B !important; }
+.form-foot a { color: #2563EB !important; }
+
+/* =========================================
+   31. EMAIL VERIFICATION PAGE (verify.html)
+========================================= */
+
+/* Force Light Background */
+body:has(.verify-card) {
+  background: #F8FAFC !important;
+}
+
+/* The Verification Card (Premium Glass) */
+.verify-card {
+  background: rgba(255, 255, 255, 0.9) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.8) !important;
+  box-shadow: 0 20px 40px -10px rgba(15, 23, 42, 0.1) !important;
+}
+
+/* Text Formatting */
+.verify-card h1 {
+  color: #0F172A !important; /* Dark Slate */
+  font-weight: 800 !important;
+}
+.verify-card p {
+  color: #475569 !important; /* Medium Gray */
+  font-weight: 500 !important;
+}
+
+/* Initial Envelope Icon Color */
+.verify-card .icon i.fa-envelope-open-text {
+  color: #2563EB !important; /* Premium Blue */
+}
+
+/* Loading Spinner Fix */
+.loading-spinner {
+  border: 4px solid #E2E8F0 !important; /* Light gray track */
+  border-left-color: #2563EB !important; /* Blue spinning tip */
+}
+
+/* Primary "Proceed to Login" Button */
+.verify-card .btn {
+  background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%) !important;
+  color: #FFFFFF !important;
+  border: none !important;
+  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.2) !important;
+}
+.verify-card .btn:hover {
+  box-shadow: 0 6px 15px rgba(37, 99, 235, 0.3) !important;
+  transform: translateY(-2px) !important;
+}
+
+/* Override JS-injected "Back to Home" Error Button */
+.verify-card .btn[style*="background:#475569"] {
+  background: #FFFFFF !important;
+  color: #0F172A !important;
+  border: 1px solid #CBD5E1 !important;
+  box-shadow: none !important;
+}
+.verify-card .btn[style*="background:#475569"]:hover {
+  background: #F1F5F9 !important;
+}
+
+/* =========================================
+   32. VERIFY PAYMENT PAGE (verifyPayment.html)
+========================================= */
+
+/* Ensure the body background is light */
+body:has(#step1) {
+  background: #F8FAFC !important;
+}
+
+/* The Main Payment Cards (Premium Glass) */
+.card {
+  background: rgba(255, 255, 255, 0.85) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.8) !important;
+  box-shadow: 0 10px 25px -5px rgba(148, 163, 184, 0.15) !important;
+  border-radius: 24px !important;
+}
+
+/* Payment Heading */
+.card h2 {
+  background: linear-gradient(135deg, #2563EB, #3B82F6) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  font-weight: 800 !important;
+}
+
+/* Step Progress Dots */
+.step-dot { background: #E2E8F0 !important; }
+.step-dot.active { background: #2563EB !important; }
+.step-dot.done { background: #10B981 !important; /* Premium Emerald Green */ }
+
+/* Info Rows (Bank Details) */
+.info-row {
+  background: #F8FAFC !important;
+  border: 1px solid #E2E8F0 !important;
+  color: #64748B !important;
+}
+.info-row strong { color: #0F172A !important; }
+
+/* Highlighted Row (Order ID) */
+.info-row.highlight {
+  background: #EFF6FF !important; /* Soft blue background */
+  border-color: #BFDBFE !important;
+}
+.info-row.highlight strong { color: #2563EB !important; }
+
+/* Form Labels & Disclaimer Note */
+label { color: #1E293B !important; font-weight: 700 !important; }
+.note { color: #64748B !important; font-weight: 500 !important; }
+
+/* Inputs */
+input[type="text"], input[type="file"] {
+  background: #FFFFFF !important;
+  color: #0F172A !important;
+  border: 1px solid #CBD5E1 !important;
+}
+input[type="text"]:focus {
+  border-color: #3B82F6 !important;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2) !important;
+}
+
+/* Primary & Ghost Buttons */
+.btn-primary {
+  background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%) !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.2) !important;
+}
+.btn-ghost {
+  background: #FFFFFF !important;
+  color: #2563EB !important;
+  border: 2px solid #2563EB !important;
+}
+.btn-ghost:hover { background: rgba(37, 99, 235, 0.05) !important; }
+
+/* =========================================
+   SUCCESS ISLAND MODAL (Payment Version)
+========================================= */
+.island-overlay {
+  background: rgba(15, 23, 42, 0.4) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+}
+.island-box {
+  background: #FFFFFF !important;
+  border: 1px solid rgba(255, 255, 255, 0.8) !important;
+  box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.25) !important;
+}
+.island-title { color: #0F172A !important; font-weight: 800 !important; }
+.island-sub { color: #64748B !important; }
+
+/* Success Buttons */
+.island-btn.primary {
+  background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%) !important;
+  color: #FFFFFF !important;
+}
+.island-btn.secondary {
+  background: #FFFFFF !important;
+  color: #2563EB !important;
+  border: 2px solid #2563EB !important;
+}
+.island-btn.secondary:hover { background: rgba(37, 99, 235, 0.05) !important; }

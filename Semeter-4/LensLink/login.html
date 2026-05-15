@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>LensLink — Login</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
+  <script src="config.js"></script>
+
+  <style>
+    :root {
+      --bg: #050c18;
+      --surface: rgba(255, 255, 255, 0.04);
+      --border: rgba(56, 189, 248, 0.25);
+      --border-glow: rgba(56, 189, 248, 0.6);
+      --accent: #38bdf8;
+      --accent-dim: #0ea5e9;
+      --text: #e2e8f0;
+      --muted: #64748b;
+      --error: #f87171;
+      --success: #34d399;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      background: var(--bg);
+      font-family: 'DM Sans', sans-serif;
+      color: var(--text);
+
+      display: flex;
+      justify-content: center;
+
+      /* FIX */
+      align-items: flex-start;
+      overflow-x: hidden;
+      overflow-y: auto;
+
+      position: relative;
+    }
+
+    /* Ambient background */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 20% 50%, rgba(56, 189, 248, 0.07) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 60% at 80% 30%, rgba(99, 102, 241, 0.05) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    /* Grid lines */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(56, 189, 248, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(56, 189, 248, 0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+    }
+
+    .page-wrapper {
+      display: flex;
+      width: 100%;
+      max-width: 980px;
+
+      /* FIX */
+      min-height: auto;
+      margin: auto;
+
+      align-items: center;
+      justify-content: center;
+
+      gap: 80px;
+      padding: 60px 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Left brand panel */
+    .brand {
+      flex: 1;
+      max-width: 380px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      animation: fadeInLeft 0.7s ease forwards;
+    }
+
+    @keyframes fadeInLeft {
+      from {
+        opacity: 0;
+        transform: translateX(-20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .brand-logo {
+      font-family: 'Poppins', monospace;
+      font-size: 2.6rem;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -1px;
+      line-height: 1;
+    }
+
+    .brand-logo span {
+      color: var(--accent);
+    }
+
+    .brand-tag {
+      font-size: 0.85rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .brand-desc {
+      font-size: 1.05rem;
+      color: #94a3b8;
+      line-height: 1.7;
+      max-width: 320px;
+      margin-top: 8px;
+    }
+
+    .brand-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .pill {
+      padding: 5px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      font-size: 0.78rem;
+      color: var(--accent);
+      background: rgba(56, 189, 248, 0.06);
+      letter-spacing: 0.04em;
+    }
+
+    /* Card */
+    .card {
+      width: 400px;
+      flex-shrink: 0;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 40px 36px;
+      box-shadow: 0 0 60px rgba(56, 189, 248, 0.08), 0 24px 48px rgba(0, 0, 0, 0.4);
+      animation: fadeInRight 0.7s ease forwards;
+      backdrop-filter: blur(16px);
+    }
+
+    @keyframes fadeInRight {
+      from {
+        opacity: 0;
+        transform: translateX(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .card-title {
+      font-family: 'Space Mono', monospace;
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+      color: #fff;
+    }
+
+    .card-sub {
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin-bottom: 28px;
+    }
+
+    .field {
+      margin-bottom: 16px;
+    }
+
+    label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #94a3b8;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 7px;
+    }
+
+    .input-wrap {
+      position: relative;
+    }
+
+    .input-wrap i {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+      font-size: 0.9rem;
+      pointer-events: none;
+    }
+
+    input {
+      width: 100%;
+      padding: 13px 14px 13px 40px;
+      font-size: 0.95rem;
+      font-family: 'DM Sans', sans-serif;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.12);
+    }
+
+    input.input-error {
+      border-color: var(--error) !important;
+      background: rgba(248, 113, 113, 0.07);
+    }
+
+    .error-msg {
+      font-size: 0.82rem;
+      color: var(--error);
+      margin-top: 8px;
+      min-height: 18px;
+      font-weight: 500;
+    }
+
+    .error-msg.success {
+      color: var(--success);
+    }
+
+    .btn {
+      width: 100%;
+      padding: 14px;
+      font-size: 0.95rem;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 600;
+      background: var(--accent);
+      color: #020617;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-top: 6px;
+      letter-spacing: 0.02em;
+      transition: background 0.2s, transform 0.1s, opacity 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn:hover {
+      background: var(--accent-dim);
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 22px 0 18px;
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .switch {
+      text-align: center;
+      font-size: 0.88rem;
+      color: var(--muted);
+    }
+
+    .switch a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .switch a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 700px) {
+      .brand {
+        display: none;
+      }
+
+      .card {
+        width: 100%;
+        max-width: 420px;
+      }
+    }
+
+    /* Large Screens (1400px+) */
+    @media (min-width:1400px) {
+      .page-wrapper {
+        max-width: 1200px;
+        gap: 120px;
+      }
+
+      .brand-logo {
+        font-size: 3rem;
+      }
+
+      .card {
+        width: 450px;
+        padding: 50px 45px;
+      }
+    }
+
+    /* Laptops (1024px – 1399px) */
+    @media (max-width:1399px) {
+      .page-wrapper {
+        gap: 60px;
+      }
+
+      .card {
+        width: 380px;
+      }
+    }
+
+    /* Tablets (768px – 1023px) */
+    @media (max-width:1023px) {
+      .page-wrapper {
+        flex-direction: column;
+        /* FIX: center properly */
+        align-items: center;
+        justify-content: center;
+        gap: 30px;
+        padding: 40px 20px;
+      }
+
+      .brand {
+        text-align: center;
+        align-items: center;
+      }
+
+      .card {
+        width: 100%;
+        max-width: 420px;
+      }
+    }
+
+    /* Mobile (up to 767px) */
+    @media (max-width:767px) {
+      body {
+        overflow-y: auto;
+        align-items: center;
+      }
+
+      .page-wrapper {
+        padding: 40px 15px;
+        gap: 30px;
+      }
+
+      /* Hide brand for clean mobile UI */
+      .brand {
+        display: none;
+      }
+
+      .card {
+        width: 100%;
+        padding: 30px 20px;
+        border-radius: 16px;
+      }
+
+      .card-title {
+        font-size: 1.3rem;
+        text-align: center;
+      }
+
+      .card-sub {
+        text-align: center;
+      }
+
+      input {
+        padding: 12px 12px 12px 38px;
+        font-size: 0.9rem;
+      }
+
+      .btn {
+        padding: 13px;
+        font-size: 0.9rem;
+      }
+    }
+
+    /* Small Mobile (up to 480px) */
+    @media (max-width:480px) {
+      .card {
+        padding: 25px 16px;
+      }
+
+      .card-title {
+        font-size: 1.2rem;
+      }
+
+      .card-sub {
+        font-size: 0.8rem;
+      }
+
+      label {
+        font-size: 0.7rem;
+      }
+
+      input {
+        font-size: 0.85rem;
+      }
+
+      .btn {
+        font-size: 0.85rem;
+      }
+    }
+  </style>
+<link rel="stylesheet" href="light-theme.css"></head>
+
+<body>
+
+  <div class="page-wrapper">
+    <div class="brand">
+      <div class="brand-tag">Campus Photography Platform</div>
+      <div class="brand-logo"><span>LensLink <i class="fa-solid fa-camera-retro"></i></span></div>
+      <p class="brand-desc">A campus-exclusive platform to discover and hire talented student photographers.</p>
+      <div class="brand-pills">
+        <span class="pill">Photographers</span>
+        <span class="pill">Hirers</span>
+        <span class="pill">Campus Verified</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Welcome back</div>
+     <div class="card-sub">Sign in to your LensLink account</div>
+
+      <div class="field">
+        <label>University Email</label>
+        <div class="input-wrap">
+          <i class="fa fa-envelope"></i>
+          <input type="email" id="loginEmail" placeholder="you@students.muet.edu.pk" oninput="clearError()">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Password</label>
+        <div class="input-wrap">
+          <i class="fa fa-lock"></i>
+          <input type="password" id="loginPassword" placeholder="Enter your password" oninput="clearError()">
+        </div>
+      </div>
+
+      <p class="error-msg" id="loginError"></p>
+
+      <button class="btn" id="loginBtn" onclick="login()">
+        <i class="fa fa-arrow-right-to-bracket"></i> Sign In
+      </button>
+
+      <div class="divider">or</div>
+
+      <div class="switch">
+        Don't have an account? <a href="register.html">Create one</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="login.js"></script>
+</body>
+
+</html>

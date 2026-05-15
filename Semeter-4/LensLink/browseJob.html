@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Browse Jobs</title>
+<script src="config.js"></script>
+<script src="authGuard.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<link rel="stylesheet" href="notifications.css">
+<script src="notifications.js"></script>
+
+<style>
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial;
+      /* Firefox */
+      scrollbar-width: thin;
+      scrollbar-color: #38bdf8 #020617;
+    }
+
+    /* CUSTOM SCROLLBAR (Webkit) */
+    ::-webkit-scrollbar {
+      width: 7px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #020617;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1e293b;
+      border-radius: 10px;
+      border: 1px solid #020617;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #38bdf8;
+    }
+
+    body {
+      font-family: Arial;
+      background: #0f172a;
+      color: white;
+      margin: 0;
+      padding: 0;
+    }
+
+    .navbar{
+  height:70px;
+  background:#020617;
+  border-bottom:1px solid rgba(56,189,248,0.3);
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 40px;
+
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  z-index:1000;
+
+  box-sizing:border-box; /* Fix overflow */
+}
+
+.logo {
+  font-size: 1.6rem;
+  font-weight: bold;
+  color: #38bdf8;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 30px;
+  font-size: larger;
+}
+
+.nav-links li {
+  cursor: pointer;
+  color: #cbd5f5;
+}
+
+.nav-links li:hover {
+  color: #38bdf8;
+}
+
+.user-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+.header{
+   text-align:center;
+  padding:120px 20px 30px; /* top padding increased */
+}
+
+.header h2{
+  font-size:2.5rem;
+  margin-bottom:10px;
+}
+.search-box{
+  max-width:600px;
+  margin:20px auto 0;
+}
+
+.search-box input{
+  width:100%;
+  padding:14px;
+  border-radius:12px;
+  border:1px solid #38bdf8;
+  background:#020617;
+  color:white;
+  font-size: larger;
+  margin-bottom: 30px;
+}
+.jobs-container{
+display:flex;
+flex-direction:column;
+gap:20px;
+max-width:900px;
+margin:auto;
+}
+
+.job-card{
+background:#1e293b;
+padding:20px;
+margin-bottom: 20px;
+border-radius:12px;
+border:1px solid rgba(56,189,248,0.3);
+box-shadow: 0 0 30px rgba(56, 189, 248, 0.15);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.job-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 0 25px rgba(147, 217, 247, 0.35);
+}
+.job-header{
+display:flex;
+align-items:center;
+gap:10px;
+margin-bottom:10px;
+}
+
+.job-header img{
+width:40px;
+height:40px;
+border-radius:50%;
+}
+
+.job-title{
+font-size:20px;
+font-weight:bold;
+margin-bottom:8px;
+}
+
+.skills{
+color:#38bdf8;
+margin-bottom:8px;
+}
+.deadline{
+    margin-bottom: 8px;
+    color: #bebaba;
+}
+
+.buttons{
+margin-top:15px;
+display:flex;
+gap:10px;
+}
+
+button{
+padding:8px 14px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+}
+
+.apply{
+background:#38bdf8;
+color:black;
+}
+
+.message {
+  background:#334155;
+  color:white;
+}
+
+/* MODAL / ISLAND STYLES */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(2, 6, 23, 0.85);
+  backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  animation: fadeIn 0.3s ease;
+}
+
+.island-card {
+  background: linear-gradient(145deg, #1e293b, #0f172a);
+  padding: 35px;
+  border-radius: 24px;
+  width: 450px;
+  max-width: 90%;
+  color: white;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 20px rgba(56, 189, 248, 0.1);
+  animation: slideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.island-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #38bdf8;
+  margin-bottom: 8px;
+}
+
+.island-subtitle {
+  font-size: 0.95rem;
+  color: #94a3b8;
+  margin-bottom: 25px;
+}
+
+.island-textarea {
+  width: 100%;
+  min-height: 140px;
+  padding: 15px;
+  border-radius: 12px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  background: rgba(2, 6, 23, 0.5);
+  color: white;
+  font-size: 1rem;
+  resize: none;
+  transition: 0.3s;
+  margin-top: 10px;
+}
+
+.island-textarea:focus {
+  outline: none;
+  border-color: #38bdf8;
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.2);
+}
+
+.island-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-top: 30px;
+}
+
+.btn-island {
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.3s;
+  border: none;
+}
+
+.btn-cancel {
+  background: rgba(51, 65, 85, 0.5);
+  color: #cbd5e1;
+}
+
+.btn-cancel:hover {
+  background: #334155;
+  color: white;
+}
+
+.btn-send {
+  background: #38bdf8;
+  color: #020617;
+  box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
+}
+
+.btn-send:hover {
+  background: #7dd3fc;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(56, 189, 248, 0.4);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(30px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+
+</style>
+<link rel="stylesheet" href="light-theme.css"></head>
+<body>
+    
+
+<!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="logo">LensLink<i class="fa-solid fa-camera-retro"></i></div>
+    <ul class="nav-links">
+      <li onclick="goDashboard()">Dashboard</li>
+      <li id="messagesNav" onclick="goMessage()">Messages</li>
+      <li id="projectNav" onclick="goProjects()">Shoots</li>
+      
+      
+    </ul>
+    <!-- Username filled by JS -->
+     <div style="display:flex; gap:20px; align-items: center;">
+        <div class="user-name" id="navUserName">Photographer</div>
+      <button onclick="logout()" style="background: #ef4444; color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-weight: 600;">Logout</button>
+      </div>
+    </div>
+  </nav>
+
+<section class="header">
+  <h1>Find Events and Earn..</h1>
+ 
+</section>
+<div class="jobs-container" id="jobsContainer"></div>
+
+<div id="loadMoreContainer" style="text-align: center; margin: 40px 0; display: none;">
+    <button id="loadMoreBtn" onclick="loadMore()" style="background: #38bdf8; color: #020617; font-weight: bold; padding: 12px 30px; border: none; border-radius: 10px; cursor: pointer; transition: 0.3s;">
+        Load More Jobs
+    </button>
+</div>
+
+<script src="browseJob.js"></script>
+</body>
+</html>

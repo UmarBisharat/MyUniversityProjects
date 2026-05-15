@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Profile | LensLink</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <script src="config.js"></script>
+  <link rel="stylesheet" href="notifications.css">
+  <script src="notifications.js"></script>
+  <script src="authGuard.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Segoe UI", sans-serif;
+      /* Firefox */
+      scrollbar-width: thin;
+      scrollbar-color: #38bdf8 #020617;
+    }
+
+    /* CUSTOM SCROLLBAR (Webkit) */
+    ::-webkit-scrollbar {
+      width: 7px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #020617;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1e293b;
+      border-radius: 10px;
+      border: 1px solid #020617;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #38bdf8;
+    }
+
+    body {
+      background-color: #020617;
+      color: #e5e7eb;
+      line-height: 1.6;
+    }
+
+    /* NAVBAR */
+    .navbar {
+      height: 70px;
+      background: #020617;
+      border-bottom: 1px solid rgba(56, 189, 248, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .logo {
+      font-size: 1.6rem;
+      font-weight: bold;
+      color: #38bdf8;
+      cursor: pointer;
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 30px;
+    }
+
+    .nav-links li {
+      cursor: pointer;
+      color: #cbd5f5;
+      font-weight: 500;
+      transition: 0.3s;
+    }
+
+    .nav-links li:hover {
+      color: #38bdf8;
+    }
+
+    /* PROFILE HEADER */
+    .profile-header {
+      display: flex;
+      align-items: center;
+      gap: 40px;
+      padding: 60px 40px;
+      background: linear-gradient(to bottom, #0f172a, #020617);
+      border-bottom: 1px solid rgba(56, 189, 248, 0.1);
+    }
+
+    .profile-pic {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #38bdf8;
+      box-shadow: 0 0 30px rgba(56, 189, 248, 0.2);
+    }
+
+    .profile-info h2 {
+      font-size: 2.5rem;
+      margin-bottom: 5px;
+      color: #fff;
+    }
+
+    .profile-info p {
+      color: #38bdf8;
+      font-size: 1.2rem;
+      font-weight: 500;
+    }
+
+    .header-actions {
+      margin-left: auto;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+      border: none;
+    }
+
+    .edit-btn {
+      background: transparent;
+      border: 1px solid #38bdf8;
+      color: #38bdf8;
+    }
+
+    .edit-btn:hover {
+      background: rgba(56, 189, 248, 0.1);
+    }
+
+    .save-btn {
+      background: #38bdf8;
+      color: #020617;
+    }
+
+    .save-btn:hover {
+      opacity: 0.9;
+    }
+
+    .logout-btn {
+      background: #ef4444;
+      color: white;
+      margin-left: 10px;
+    }
+
+    /* SECTIONS */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    .section {
+      margin-bottom: 40px;
+    }
+
+    .section h3 {
+      font-size: 1.5rem;
+      color: #38bdf8;
+      margin-bottom: 15px;
+      border-left: 4px solid #38bdf8;
+      padding-left: 15px;
+    }
+
+    .section p {
+      font-size: 1.1rem;
+      color: #94a3b8;
+    }
+
+    /* INPUTS */
+    input,
+    textarea {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #334155;
+      background: #0f172a;
+      color: #fff;
+      font-size: 1rem;
+      transition: 0.3s;
+    }
+
+    input:focus,
+    textarea:focus {
+      border-color: #38bdf8;
+      outline: none;
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
+    }
+
+    /* SKILLS */
+    .skills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .skill-tag {
+      padding: 8px 16px;
+      border-radius: 20px;
+      background: rgba(56, 189, 248, 0.05);
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      font-size: 0.95rem;
+      color: #cbd5f5;
+    }
+
+    /* PORTFOLIO */
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 25px;
+      margin-top: 20px;
+    }
+
+    .work-card {
+      background: #0f172a;
+      border: 1px solid #1e293b;
+      border-radius: 12px;
+      overflow: hidden;
+      transition: 0.3s;
+    }
+
+    .work-card:hover {
+      transform: translateY(-5px);
+      border-color: #38bdf8;
+    }
+
+    .work-card img,
+    .work-card video {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .empty-state {
+      font-style: italic;
+      color: #475569;
+    }
+
+    /* COMPLETE PROFILE ALERT - PREMIUM */
+    .incomplete-alert-container {
+      background: rgba(56, 189, 248, 0.08);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      border-radius: 16px;
+      padding: 24px 32px;
+      margin: 20px auto;
+      max-width: 1100px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      animation: slideIn 0.5s ease-out, premiumPulse 3s infinite;
+    }
+
+    .incomplete-alert-message {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .incomplete-alert-icon {
+      font-size: 1.5rem;
+      color: #38bdf8;
+      background: rgba(56, 189, 248, 0.1);
+      width: 45px;
+      height: 45px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .incomplete-alert-text {
+      font-size: 1.05rem;
+      font-weight: 500;
+      color: #e5e7eb;
+      margin: 0;
+    }
+
+    .incomplete-alert-text span {
+      display: block;
+      font-size: 0.9rem;
+      color: #94a3b8;
+      font-weight: normal;
+      margin-top: 2px;
+    }
+
+    .complete-now-btn {
+      background: #38bdf8;
+      color: #020617;
+      padding: 12px 24px;
+      border-radius: 10px;
+      font-weight: 700;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 15px rgba(56, 189, 248, 0.2);
+    }
+
+    .complete-now-btn:hover {
+      background: #7dd3fc;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(56, 189, 248, 0.4);
+    }
+
+    @keyframes slideIn {
+      from { transform: translateY(-20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    @keyframes premiumPulse {
+      0% { border-color: rgba(56, 189, 248, 0.3); }
+      50% { border-color: rgba(56, 189, 248, 0.6); box-shadow: 0 8px 32px rgba(56, 189, 248, 0.1); }
+      100% { border-color: rgba(56, 189, 248, 0.3); }
+    }
+    /* =========================
+   📱 MOBILE (max 768px)
+========================= */
+@media (max-width: 768px) {
+
+  /* NAVBAR */
+  .navbar {
+    flex-direction: column;
+    height: auto;
+    padding: 15px 20px;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .nav-links {
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+  }
+
+  /* PROFILE HEADER */
+  .profile-header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 20px;
+    padding: 30px 20px;
+  }
+
+  .profile-pic {
+    width: 120px;
+    height: 120px;
+  }
+
+  .profile-info h2 {
+    font-size: 1.6rem;
+  }
+
+  .profile-info p {
+    font-size: 1rem;
+  }
+
+  /* ACTION BUTTONS */
+  .header-actions {
+    margin-left: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .header-actions .btn {
+    width: 100%;
+  }
+
+  /* CONTAINER */
+  .container {
+    padding: 20px;
+  }
+
+  .section h3 {
+    font-size: 1.2rem;
+  }
+
+  .section p {
+    font-size: 0.95rem;
+  }
+
+  /* SKILLS */
+  .skills {
+    gap: 8px;
+  }
+
+  .skill-tag {
+    font-size: 0.8rem;
+    padding: 6px 12px;
+  }
+
+  /* PORTFOLIO */
+  .portfolio-grid {
+    grid-template-columns: 1fr; /* one item per row */
+    gap: 15px;
+  }
+
+  .work-card img,
+  .work-card video {
+    height: 180px;
+  }
+
+  /* ALERT */
+  .incomplete-alert-container {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px;
+    gap: 15px;
+  }
+
+  .complete-now-btn {
+    width: 100%;
+    text-align: center;
+  }
+}
+  </style>
+    <link rel="stylesheet" href="successIsland.css">
+    <script src="successIsland.js"></script>
+<link rel="stylesheet" href="light-theme.css"></head>
+
+<body>
+
+  <nav class="navbar">
+    <div class="logo" onclick="window.location.href='index.html'">LensLink<i class="fa-solid fa-camera-retro"></i></div>
+    <ul class="nav-links">
+      <li onclick="goDashboard()">Dashboard</li>
+      <li onclick="goMessage()">Messages</li>
+      <li onclick="goProjects()">Shoots</li>
+      <li><a href="browseJob.html" style="text-decoration:none; color:inherit;">Browse Jobs</a></li>
+    </ul>
+    <button class="btn logout-btn" onclick="logout()">Logout</button>
+  </nav>
+
+  <header class="profile-header">
+    <img id="profilePic" class="profile-pic" src="https://i.pravatar.cc/180" />
+    <div class="profile-info">
+      <h2 id="nameText">Loading...</h2>
+      <div id="reputationStats" style="margin-top:8px; font-size:1rem;"></div>
+    </div>
+    <div class="header-actions">
+      <button class="btn edit-btn" id="editBtn" onclick="toggleEdit()">Edit Profile</button>
+      <button class="btn save-btn hidden" id="saveBtn" onclick="saveProfile()">Save Changes</button>
+      <button class="btn delete-btn" onclick="deleteAccount()"
+        style="background:#ef4444; color:white; margin-left:10px;">Delete Account</button>
+    </div>
+
+  </header>
+
+  <div id="incompletedProfile" style="display: flex; justify-content: center; align-items: center;">
+  </div>
+
+  <main class="container">
+
+  <div class="section">
+    <h3>Department</h3>
+    <p id="departmentText" class="empty-state"></p>
+  </div>
+
+  <div class="section">
+    <h3>Bio</h3>
+    <p id="bioText" class="empty-state"></p>
+  </div>
+
+  <div class="section">
+    <h3>Experience Level</h3>
+    <p id="experienceText" class="empty-state"></p>
+  </div>
+
+  <div class="section">
+    <h3>Location</h3>
+    <p id="locationText" class="empty-state"></p>
+  </div>
+
+  <div class="section">
+    <h3>Portfolio</h3>
+    <p id="portfolioText" class="empty-state"></p>
+  </div>
+
+  <div class="section">
+    <h3>Pricing</h3>
+    <p id="pricingText" class="empty-state"></p>
+  </div>
+
+  <div class="section">
+    <h3>Bank Account</h3>
+    <p id="bankText" class="empty-state"></p>
+  </div>
+</main>
+
+
+  <script src="profileView.js"></script>
+</body>
+
+</html>

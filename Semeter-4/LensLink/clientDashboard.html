@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <link rel="stylesheet" href="notifications.css">
+  <script src="notifications.js"></script>
+  <title>LensLink - Client Dashboard</title>
+  <script src="config.js"></script>
+  <script src="authGuard.js"></script>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Segoe UI", sans-serif;
+      /* Firefox */
+      scrollbar-width: thin;
+      scrollbar-color: #38bdf8 #020617;
+    }
+
+    /* CUSTOM SCROLLBAR (Webkit) */
+    ::-webkit-scrollbar {
+      width: 7px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #020617;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1e293b;
+      border-radius: 10px;
+      border: 1px solid #020617;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #38bdf8;
+    }
+
+    body {
+      background: #020617;
+      color: #e5e7eb;
+      padding-bottom: 40px;
+    }
+
+    /* NAVBAR */
+    .navbar {
+      height: 70px;
+      background: #020617;
+      border-bottom: 1px solid rgba(56, 189, 248, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 999;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #38bdf8;
+      cursor: pointer;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 30px;
+      list-style: none;
+    }
+
+    .nav-links li {
+      cursor: pointer;
+      color: #cbd5f5;
+      font-size: larger;
+    }
+
+    .nav-links li:hover {
+      color: #38bdf8;
+    }
+
+    .profile-btn {
+      cursor: pointer;
+      font-weight: 600;
+      font-size: larger;
+    }
+
+    /* MAIN CONTAINER — top padding accounts for fixed navbar */
+    .container {
+      padding: 110px 40px 40px;
+    }
+
+    .welcome-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .welcome {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+
+    .subtext {
+      color: #94a3b8;
+      margin-bottom: 30px;
+      font-size: large;
+    }
+
+    .post-job-btn {
+      background: #38bdf8;
+      color: #020617;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 15px;
+      transition: 0.2s;
+    }
+
+    .post-job-btn:hover {
+      opacity: 0.85;
+      transform: translateY(-1px);
+    }
+
+    /* STATS CARDS */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+
+    .card {
+      background: linear-gradient(145deg, #0f172a, #020617);
+      border: 1px solid #38bdf8;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.08);
+    }
+
+    .stat-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      min-height: 170px;
+    }
+
+    .stat-card h3 {
+      font-size: 1.2rem;
+      text-align: center;
+    }
+
+    .stat-card h1 {
+      color: #38bdf8;
+      font-size: 2rem;
+    }
+
+    .card p {
+      color: #94a3b8;
+      text-align: center;
+      font-size: large;
+    }
+
+    /* BIG CARDS */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      align-items: stretch;
+    }
+
+    .big-card {
+      height: 420px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .big-card h3 {
+      font-size: 1.5rem;
+      margin-bottom: 5px;
+      text-align: center;
+      line-height: 100px;
+    }
+
+    #savedFreelancers {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-top: 15px;
+    }
+
+    #savedFreelancers div {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px;
+      background: rgba(255, 255, 255, 0.04);
+      border-radius: 10px;
+    }
+
+    .big-card #savedFreelancers img {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    #savedFreelancers span {
+      flex: 1;
+    }
+
+    #savedFreelancers button {
+      background: #38bdf8;
+      border: none;
+      padding: 6px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #38bdf8;
+    }
+
+    .job-item {
+      padding: 14px;
+      border-radius: 10px;
+      background: rgba(56, 189, 248, 0.05);
+      margin-top: 15px;
+      border: 1px solid rgba(56, 189, 248, 0.2);
+    }
+
+    .job-title {
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .job-info {
+      font-size: 14px;
+      color: #94a3b8;
+      margin-bottom: 8px;
+    }
+
+    .response-btn {
+      background: #38bdf8;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    .delete-btn {
+      background: #ef4444;
+      color: white;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .delete-btn:hover {
+      background: #dc2626;
+    }
+
+    /* =========================
+    MOBILE (max 600px)
+========================= */
+@media (max-width: 600px) {
+
+  .navbar {
+    flex-direction: column;
+    height: auto;
+    padding: 15px 20px;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .nav-links {
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .nav-links li {
+    font-size: 1rem;
+  }
+
+  .container {
+    padding: 120px 20px 20px;
+  }
+
+  .welcome-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .welcome {
+    font-size: 1.8rem;
+  }
+
+  .subtext {
+    font-size: 1rem;
+  }
+
+  .post-job-btn {
+    width: 100%;
+    text-align: center;
+  }
+
+  /* Stats */
+  .stats {
+    gap: 20px;
+  }
+
+  .stat-card {
+    min-height: 140px;
+  }
+
+  .stat-card h1 {
+    font-size: 1.6rem;
+  }
+
+  /* Big cards stack */
+  .grid-2 {
+    grid-template-columns: 1fr;
+  }
+
+  .big-card {
+    height: auto;
+    max-height: 350px;
+  }
+
+  .big-card h3 {
+    font-size: 1.2rem;
+    line-height: normal;
+    margin-bottom: 10px;
+  }
+
+  #savedFreelancers div {
+    flex-direction: row;
+    gap: 8px;
+  }
+
+  #savedFreelancers img {
+    width: 35px;
+    height: 35px;
+  }
+}
+
+
+/* =========================
+   📱 TABLET (601px - 992px)
+========================= */
+@media (min-width: 601px) and (max-width: 992px) {
+
+  .navbar {
+    padding: 0 20px;
+  }
+
+  .nav-links {
+    gap: 20px;
+  }
+
+  .container {
+    padding: 110px 30px 30px;
+  }
+
+  .welcome {
+    font-size: 2rem;
+  }
+
+  .stats {
+    gap: 25px;
+  }
+
+  .stat-card h1 {
+    font-size: 1.8rem;
+  }
+
+  /* Still stacked for better UX */
+  .grid-2 {
+    grid-template-columns: 1fr;
+  }
+
+  .big-card {
+    height: 380px;
+  }
+}
+
+
+/* =========================
+   💻 LARGE SCREENS (1200px+)
+========================= */
+@media (min-width: 1200px) {
+
+  .container {
+    padding: 120px 100px 40px;
+  }
+
+  .welcome {
+    font-size: 2.8rem;
+  }
+
+  .stats {
+    gap: 40px;
+  }
+
+  .grid-2 {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .big-card {
+    height: 450px;
+  }
+
+  .big-card h3 {
+    font-size: 1.6rem;
+  }
+
+  .stat-card h1 {
+    font-size: 2.2rem;
+  }
+}
+  </style>
+    <link rel="stylesheet" href="successIsland.css">
+    <script src="successIsland.js"></script>
+
+    
+<link rel="stylesheet" href="light-theme.css"></head>
+
+<body>
+
+  <nav class="navbar">
+    <div class="logo" onclick="goHome()">LensLink<i class="fa-solid fa-camera-retro"></i></div>
+
+    <ul class="nav-links" id="navLinks">
+      <li onclick="goBrowse()">Browse</li>
+      <li onclick="goMessages()">Messages</li>
+      <li onclick="goProfile()">Profile</li>
+      <li onclick="goOrders()">Bookings</li>
+    </ul>
+
+    <div style="display: flex; align-items: center; gap: 20px;">
+      <div class="profile-btn" id="navName">Client</div>
+      <button onclick="logout()"
+        style="background: #ef4444; color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-weight: 600;">Logout</button>
+    </div>
+  </nav>
+
+  <div id="verifyBanner"
+    style="display:none; background: #ea580c; color: white; text-align: center; padding: 10px; font-weight: 600; position: fixed; top: 70px; left: 0; width: 100%; z-index: 998;">
+    <i class="fas fa-exclamation-circle"></i> Your email is not verified. Please check your inbox to verify your
+    account.
+  </div>
+
+  <div id="incompletedProfile"></div>
+
+  <div class="container">
+    <div class="welcome-row">
+      <div class="welcome">
+        Welcome back, <span id="clientName">Client</span>
+      </div>
+      <button class="post-job-btn" onclick="goPostJob()">Post Job</button>
+    </div>
+
+    <div class="subtext">Find the perfect Photographer for your events</div>
+
+    <!-- STATS -->
+    <div class="stats">
+      <div class="card stat-card">
+        <h3>Saved Photographers <i class="fa-regular fa-bookmark" style="color: rgb(116, 192, 252);"></i></h3>
+        <h1 id="savedCount">0</h1>
+      </div>
+
+      <div class="card stat-card">
+        <h3>Messages <i class="fa-solid fa-message" style="color: rgb(116, 192, 252);"></i></h3>
+        <h1 id="messageCount">0</h1>
+      </div>
+
+      <div class="card stat-card">
+        <h3>Bookings <i class="fa-solid fa-cart-arrow-down" style="color: rgb(116, 192, 252);"></i></h3>
+        <h1 id="activeOrders">0</h1>
+      </div>
+
+      <div class="card stat-card">
+        <h3>Total Spent <i class="fa-solid fa-coins" style="color: rgb(116, 192, 252);"></i></h3>
+        <h1 id="spentAmount"></h1>
+      </div>
+    </div>
+
+    <!-- BIG SECTIONS -->
+    <div class="grid-2">
+      <div class="card big-card">
+        <h3>My Posts <i class="fa-solid fa-briefcase" style="color: rgb(116, 192, 252);"></i></h3>
+        <div id="myPosts"></div>
+      </div>
+
+      <div class="card big-card">
+        <h3>Saved Photographers <i class="fa-regular fa-bookmark" style="color: rgb(116, 192, 252);"></i></h3>
+        <div id="savedFreelancers"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="clientDashboard.js"></script>
+
+</body>
+
+</html>

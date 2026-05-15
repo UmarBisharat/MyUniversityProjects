@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Mediation Dashboard | LensLink</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <link rel="stylesheet" href="notifications.css">
+  <script src="config.js"></script>
+  <script src="notifications.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+      /* Firefox */
+      scrollbar-width: thin;
+      scrollbar-color: #38bdf8 #020617;
+    }
+
+    /* CUSTOM SCROLLBAR (Webkit) */
+    ::-webkit-scrollbar {
+      width: 7px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #020617;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1e293b;
+      border-radius: 10px;
+      border: 1px solid #020617;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #38bdf8;
+    }
+    body { background: #020617; color: #e5e7eb; }
+    
+    .navbar {
+      height: 70px;
+      background: #020617;
+      border-bottom: 1px solid rgba(56, 189, 248, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .logo { font-size: 1.5rem; font-weight: bold; color: #38bdf8; cursor: pointer; }
+    
+    .container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
+    h1 { font-size: 2rem; margin-bottom: 30px; color: #fff; }
+
+    .tabs { display: flex; gap: 20px; border-bottom: 1px solid #1e293b; margin-bottom: 30px; }
+    .tab { padding: 10px 20px; cursor: pointer; color: #94a3b8; border-bottom: 2px solid transparent; transition: 0.3s; }
+    .tab.active { color: #38bdf8; border-bottom-color: #38bdf8; font-weight: 600; }
+
+    .grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
+    .card { background: #0f172a; border: 1px solid #1e293b; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 15px; }
+    .card-header { display: flex; justify-content: space-between; align-items: start; }
+    .card-title { font-size: 1.2rem; font-weight: 600; color: #fff; }
+    .badge { padding: 4px 10px; border-radius: 6px; font-size: 0.8rem; font-weight: 600; }
+    .badge-pending { background: rgba(250, 204, 21, 0.1); color: #facc15; border: 1px solid #facc15; }
+    .badge-dispute { background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid #ef4444; }
+
+    .info-row { display: flex; gap: 30px; font-size: 0.95rem; color: #94a3b8; }
+    .info-item b { color: #cbd5e1; }
+
+    .proof-img { width: 100%; max-height: 300px; object-fit: contain; border-radius: 8px; border: 1px solid #1e293b; margin-top: 10px; cursor: pointer; transition: 0.3s; }
+    .proof-img:hover { opacity: 0.8; }
+
+    .actions { display: flex; gap: 10px; margin-top: 10px; }
+    .btn { padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; border: none; transition: 0.3s; }
+    .btn-primary { background: #38bdf8; color: #020617; }
+    .btn-danger { background: #ef4444; color: #fff; }
+    .btn-secondary { background: #334155; color: #fff; }
+    .btn:hover { opacity: 0.9; transform: translateY(-1px); }
+
+    .empty-state { text-align: center; padding: 60px; color: #475569; font-style: italic; }
+
+    /* Modal */
+    .modal { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); display:none; justify-content:center; align-items:center; z-index:2000; padding: 20px; }
+    .modal img { max-width: 90%; max-height: 90%; border-radius: 8px; }
+  </style>
+<link rel="stylesheet" href="light-theme.css"><link rel="stylesheet" href="light-theme.css"></head>
+<body>
+  <nav class="navbar">
+    <div class="logo" onclick="window.location.href='freelancerDashboard.html'">LensLink Admin</div>
+    <div style="display: flex; align-items: center; gap: 20px;">
+      <button onclick="window.location.href='chat.html'" class="btn btn-secondary" style="background: #38bdf8; color: #020617;">
+        <i class="fa-solid fa-message"></i> Messages
+      </button>
+      <div style="color: #94a3b8; font-size: 0.9rem;">Financial Mediation Portal</div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h1>Mediation Dashboard</h1>
+    
+    <div class="tabs">
+      <div class="tab active" onclick="switchTab('disputes')">Disputes</div>
+      <div class="tab" onclick="switchTab('users')">Manage Users</div>
+    </div>
+
+    <div id="userSearchContainer" style="display: none; margin-bottom: 20px;">
+      <div style="position: relative;">
+        <i class="fa-solid fa-search" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #94a3b8;"></i>
+        <input type="text" id="userSearchInput" placeholder="Search users by name or email..." 
+               style="width: 100%; padding: 12px 12px 12px 45px; background: #0f172a; border: 1px solid #1e293b; border-radius: 10px; color: #fff; outline: none; transition: 0.3s;">
+      </div>
+    </div>
+
+    <div id="content" class="grid">
+      <!-- Cards will be injected here -->
+      <div class="empty-state">Loading mediated orders...</div>
+    </div>
+
+    <div id="loadMoreContainer" style="text-align: center; margin: 40px 0; display: none;">
+      <button id="loadMoreBtn" onclick="loadMore()" style="background: #38bdf8; color: #020617; font-weight: bold; padding: 12px 30px; border: none; border-radius: 10px; cursor: pointer; transition: 0.3s;">
+        Load More
+      </button>
+    </div>
+  </div>
+
+  <div class="modal" id="imgModal" onclick="this.style.display='none'">
+    <img id="modalImg" src="">
+  </div>
+
+  <script src="adminDashboard.js"></script>
+</body>
+</html>

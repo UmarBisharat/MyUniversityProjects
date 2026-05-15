@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Create Profile</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <script src="config.js"></script>
+  <link rel="stylesheet" href="notifications.css">
+  <script src="notifications.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* profile.css */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+      /* Firefox */
+      scrollbar-width: thin;
+      scrollbar-color: #38bdf8 #020617;
+    }
+
+    /* CUSTOM SCROLLBAR (Webkit) */
+    ::-webkit-scrollbar {
+      width: 7px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #020617;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1e293b;
+      border-radius: 10px;
+      border: 1px solid #020617;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #38bdf8;
+    }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #020617, #0f172a, #020617);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+    }
+
+    .container {
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 4rem;
+      text-shadow: 0 0 8px rgba(56, 189, 248, 0.7);
+    }
+
+    .subtitle {
+      font-size: 1.3rem;
+      color: #cbd5f5;
+      margin-bottom: 25px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.08);
+      border: 3px solid #38bdf8;
+      border-radius: 18px;
+      padding: 35px;
+  width: 100%;
+  max-width: 500px;
+      box-shadow: 0 0 25px rgba(56, 189, 248, 0.5);
+      position: relative;
+    }
+
+    .step {
+      text-align: center;
+    }
+
+    .step h2 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      padding: 14px;
+      font-size: 1.1rem;
+      margin: 10px 0;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      background: white;
+      color: black;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      font-size: 1.1rem;
+      background: #38bdf8;
+      color: #000;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+
+    button:hover {
+      background: #0ea5e9;
+    }
+
+    .back {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      font-size: 1.5rem;
+      color: #38bdf8;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    @media (max-width: 600px) {
+
+  body {
+    align-items: flex-start; /* prevent vertical squeeze */
+    padding: 20px 10px;
+  }
+
+  .container {
+    width: 100%;
+  }
+
+  .card {
+    width: 100%;
+    padding: 25px 18px;
+    border-radius: 14px;
+  }
+
+  h1 {
+    font-size: 2.2rem;
+    margin-bottom: 10px;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+    margin-bottom: 20px;
+  }
+
+  .step h2 {
+    font-size: 1.4rem;
+    margin-bottom: 15px;
+  }
+
+  input,
+  textarea,
+  select {
+    padding: 16px;
+    font-size: 1rem;
+    border-radius: 10px;
+  }
+
+  textarea {
+    min-height: 120px;
+  }
+
+  button {
+    padding: 16px;
+    font-size: 1rem;
+    border-radius: 10px;
+  }
+
+  .back {
+    font-size: 1.2rem;
+    top: 8px;
+    left: 8px;
+  }
+}
+  </style>
+<link rel="stylesheet" href="light-theme.css"></head>
+
+<body>
+
+  <div class="container">
+    <h1>Create Profile</h1>
+    <p class="subtitle">Build your professional profile step by step</p>
+
+    <div class="card">
+   <!-- Step 1 -->
+<div id="step1" class="step">
+  <h2>Your Name</h2>
+  <input type="text" id="name" placeholder="Full Name">
+  <button onclick="nextStep(1)">Next</button>
+</div>
+
+<!-- Step 2 -->
+<div id="step2" class="step hidden">
+  <h2>Profile Picture</h2>
+  <input type="file" id="profilePic" accept="image/*">
+  <button onclick="nextStep(2)">Next</button>
+  <div class="back" onclick="prevStep(2)">←</div>
+</div>
+
+<!-- Step 3 -->
+<div id="step3" class="step hidden">
+  <h2>Department</h2>
+  <select id="department">
+    <option value="">Select Department</option>
+         <option value="Software Engineering">Software Engineering</option>
+          <option value="Chemical Engineering">Chemical Engineering</option>
+          <option value="Computer System Engineering">Computer System Engineering</option>
+          <option value="Computer Science">Computer Science</option>
+          <option value="Mechanical Engineering">Mechanical Engineering</option>
+          <option value="Industrial Engineering">Industrial Engineering</option>
+          <option value="Information Technology">Information Technology (IT)</option>
+          <option value="Artificial Intelligence">Artificial Intelligence</option>
+          <option value="Petroleum Engineering">Petroleum Engineering</option>
+          <option value="Mechatronics Engineering">Mechatronics Engineering</option>
+          <option value="Electrical Engineering">Electrical Engineering</option>
+          <option value="Civil Engineering">Civil Engineering</option>
+          <option value="English">Centre of English Language and Linguistic</option>
+          <option value="Mathematics">Mathematics</option>
+  </select>
+  <button onclick="nextStep(3)">Next</button>
+  <div class="back" onclick="prevStep(3)">←</div>
+</div>
+
+<!-- Step 4 -->
+<div id="step4" class="step hidden">
+  <h2>Bio</h2>
+  <textarea id="bio" placeholder="Tell about your photography..."></textarea>
+  <button onclick="nextStep(4)">Next</button>
+  <div class="back" onclick="prevStep(4)">←</div>
+</div>
+
+<!-- Step 5 -->
+<div id="step5" class="step hidden">
+  <h2>Photography Type</h2>
+
+  <select id="photographyType">
+    <option value="">Select Type</option>
+    <option value="Event">Event</option>
+    <option value="Portrait">Portrait</option>
+    <option value="Wedding">Wedding</option>
+    <option value="Product">Product</option>
+    <option value="Fashion">Fashion</option>
+    <option value="Street">Street</option>
+  </select>
+
+  <button onclick="nextStep(5)">Next</button>
+  <div class="back" onclick="prevStep(5)">←</div>
+</div>
+
+<!-- Step 6 -->
+<div id="step6" class="step hidden">
+  <h2>Experience Level</h2>
+  <select id="experience">
+    <option value="">Select</option>
+    <option>Beginner</option>
+    <option>Intermediate</option>
+    <option>Professional</option>
+  </select>
+  <button onclick="nextStep(6)">Next</button>
+  <div class="back" onclick="prevStep(6)">←</div>
+</div>
+
+<!-- Step 7 -->
+<div id="step7" class="step hidden">
+  <h2>Location</h2>
+
+  <select id="location">
+    <option value="">Select Location</option>
+    <option value="MUET">MUET</option>
+    <option value="Hyderabad">Hyderabad</option>
+    <option value="Jamshoro">Jamshoro</option>
+  </select>
+
+  <button onclick="nextStep(7)">Next</button>
+  <div class="back" onclick="prevStep(7)">←</div>
+</div>
+
+<!-- Step 8 -->
+<div id="step8" class="step hidden">
+  <h2>Portfolio Link</h2>
+  <input type="text" id="portfolio" placeholder="Google Drive / Instagram link">
+  <button onclick="nextStep(8)">Next</button>
+  <div class="back" onclick="prevStep(8)">←</div>
+</div>
+
+<!-- Step 9 -->
+<div id="step9" class="step hidden">
+  <h2>Pricing</h2>
+  <input type="text" id="pricing" placeholder="Starting price (Rs)">
+  <button onclick="nextStep(9)">Next</button>
+  <div class="back" onclick="prevStep(9)">←</div>
+</div>
+
+<!-- Step 10 -->
+<div id="step10" class="step hidden">
+  <h2>Bank Account</h2>
+  <input type="text" id="bankAccount" placeholder="Account Number">
+  <h2>Account Title</h2>
+  <input type="text" id="accountTitle" placeholder="Account Title">
+  <button onclick="createProfile()">Create Profile</button>
+  <div class="back" onclick="prevStep(10)">←</div>
+</div>
+
+    </div>
+  </div>
+
+  <script src="createProfile.js"></script>
+</body>
+
+</html>

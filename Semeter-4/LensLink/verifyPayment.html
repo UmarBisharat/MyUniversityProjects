@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LensLink - Verify Payment</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <script src="config.js"></script>
+    <link rel="stylesheet" href="notifications.css">
+    <script src="notifications.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", sans-serif;
+            /* Firefox */
+            scrollbar-width: thin;
+            scrollbar-color: #38bdf8 #020617;
+        }
+
+        /* CUSTOM SCROLLBAR (Webkit) */
+        ::-webkit-scrollbar {
+            width: 7px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #020617;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 10px;
+            border: 1px solid #020617;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #38bdf8;
+        }
+
+        body {
+            background: #020617;
+            color: #e5e7eb;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* STEP CARDS */
+        .card {
+            background: linear-gradient(145deg, #0f172a, #020617);
+            border: 1px solid #38bdf8;
+            border-radius: 18px;
+            padding: 36px 30px;
+            width: 100%;
+            max-width: 500px;
+            margin: 40px 20px;
+            box-shadow: 0 0 25px rgba(56, 189, 248, 0.25);
+            display: none;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 14px;
+        }
+
+        .card.active {
+            display: flex;
+        }
+
+        h2 {
+            color: #38bdf8;
+            font-size: 1.9rem;
+            width: 100%;
+            text-align: center;
+            margin-bottom: 4px;
+        }
+
+        /* INFO ROWS */
+        .info-row {
+            width: 100%;
+            background: rgba(56, 189, 248, 0.05);
+            border: 1px solid rgba(56, 189, 248, 0.18);
+            border-radius: 10px;
+            padding: 12px 16px;
+            font-size: 15px;
+            color: #94a3b8;
+        }
+
+        .info-row strong {
+            color: #e5e7eb;
+        }
+
+        .info-row.highlight {
+            border-color: rgba(56, 189, 248, 0.4);
+            background: rgba(56, 189, 248, 0.08);
+        }
+
+        .info-row.highlight strong {
+            color: #38bdf8;
+            font-size: 1.1rem;
+        }
+
+        .note {
+            color: #94a3b8;
+            font-size: 14px;
+            line-height: 1.6;
+            width: 100%;
+        }
+
+        /* FORM FIELDS */
+        label {
+            display: block;
+            width: 100%;
+            font-weight: 600;
+            color: #cde2eb;
+            margin-top: 4px;
+            margin-bottom: 4px;
+        }
+
+        input[type="text"],
+        input[type="file"] {
+            width: 100%;
+            padding: 13px 14px;
+            border-radius: 8px;
+            border: 1.5px solid rgba(56, 189, 248, 0.25);
+            background: #020617;
+            color: white;
+            font-size: 15px;
+            transition: border-color 0.2s;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #38bdf8;
+        }
+
+        input[type="file"] {
+            padding: 10px 14px;
+            cursor: pointer;
+            color: #94a3b8;
+        }
+
+        input[type="file"]::file-selector-button {
+            background: rgba(56, 189, 248, 0.15);
+            color: #38bdf8;
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            border-radius: 6px;
+            padding: 6px 14px;
+            cursor: pointer;
+            font-size: 13px;
+            margin-right: 12px;
+            transition: 0.2s;
+        }
+
+        input[type="file"]::file-selector-button:hover {
+            background: rgba(56, 189, 248, 0.25);
+        }
+
+        /* SCREENSHOT PREVIEW */
+        #previewWrap {
+            display: none;
+            width: 100%;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid rgba(56, 189, 248, 0.25);
+        }
+
+        #previewWrap img {
+            width: 100%;
+            max-height: 200px;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* BUTTONS */
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 15px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn:hover {
+            opacity: 0.85;
+            transform: translateY(-1px);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-primary {
+            background: #38bdf8;
+            color: #020617;
+            margin-top: 8px;
+        }
+
+        .btn-ghost {
+            background: rgba(255, 255, 255, 0.04);
+            color: #94a3b8;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 4px;
+        }
+
+        .btn-ghost:hover {
+            color: #e5e7eb;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        /* STEP INDICATOR */
+        .steps {
+            display: flex;
+            gap: 8px;
+            width: 100%;
+            justify-content: center;
+            margin-bottom: 8px;
+        }
+
+        .step-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(56, 189, 248, 0.2);
+            transition: 0.3s;
+        }
+
+        .step-dot.active {
+            background: #38bdf8;
+            transform: scale(1.3);
+        }
+
+        .step-dot.done {
+            background: #22c55e;
+        }
+
+        /* SUCCESS ISLAND */
+        .island-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(2, 6, 23, 0.88);
+            backdrop-filter: blur(8px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            animation: fadeIn 0.35s ease-out;
+        }
+
+        .island-overlay.visible {
+            display: flex;
+        }
+
+        .island-box {
+            background: rgba(15, 23, 42, 0.95);
+            border: 1px solid rgba(56, 189, 248, 0.4);
+            border-radius: 24px;
+            padding: 40px 36px;
+            width: 90%;
+            max-width: 440px;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 30px rgba(56, 189, 248, 0.15);
+            animation: scaleUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes scaleUp {
+            from {
+                transform: scale(0.9);
+            }
+
+            to {
+                transform: scale(1);
+            }
+        }
+
+        .island-icon {
+            font-size: 52px;
+            margin-bottom: 18px;
+        }
+
+        .island-title {
+            font-size: 1.6rem;
+            color: #38bdf8;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .island-sub {
+            color: #94a3b8;
+            line-height: 1.6;
+            margin-bottom: 28px;
+        }
+
+        .island-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .island-btn {
+            padding: 14px;
+            border-radius: 12px;
+            border: none;
+            font-weight: 700;
+            font-size: 15px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .island-btn.primary {
+            background: #38bdf8;
+            color: #020617;
+        }
+
+        .island-btn.primary:hover {
+            background: #7dd3fc;
+            transform: translateY(-2px);
+        }
+
+        .island-btn.secondary {
+            background: rgba(255, 255, 255, 0.04);
+            color: #38bdf8;
+            border: 1px solid rgba(56, 189, 248, 0.3);
+        }
+
+        .island-btn.secondary:hover {
+            background: rgba(56, 189, 248, 0.1);
+        }
+        /* =========================
+   📱 MOBILE FIX
+========================= */
+@media (max-width: 600px) {
+
+  .card {
+    padding: 24px 18px;
+    border-radius: 14px;
+    margin: 20px 10px;
+    gap: 12px;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  .info-row {
+    padding: 10px 12px;
+    font-size: 14px;
+  }
+
+  .info-row.highlight strong {
+    font-size: 1rem;
+  }
+
+  label {
+    font-size: 0.9rem;
+  }
+
+  input[type="text"],
+  input[type="file"] {
+    padding: 14px;
+    font-size: 0.95rem;
+  }
+
+  #previewWrap img {
+    max-height: 160px;
+  }
+
+  .btn {
+    padding: 15px;
+    font-size: 0.95rem;
+    border-radius: 10px;
+  }
+
+  .steps {
+    margin-bottom: 6px;
+  }
+
+  .step-dot {
+    width: 7px;
+    height: 7px;
+  }
+
+  /* SUCCESS MODAL */
+  .island-box {
+    padding: 28px 20px;
+    border-radius: 18px;
+  }
+
+  .island-title {
+    font-size: 1.3rem;
+  }
+
+  .island-sub {
+    font-size: 0.95rem;
+  }
+
+  .island-btn {
+    padding: 13px;
+    font-size: 0.95rem;
+  }
+}
+    </style>
+<link rel="stylesheet" href="light-theme.css"></head>
+
+<body>
+
+    <!-- STEP 1: Bank Details -->
+    <div class="card active" id="step1">
+        <div class="steps">
+            <div class="step-dot active" id="dot1"></div>
+            <div class="step-dot" id="dot2"></div>
+        </div>
+
+        <h2>Payment Details</h2>
+
+        <div class="info-row highlight">
+            <strong>Order ID</strong><br>
+            <strong id="orderIdDisplay" style="color:#38bdf8;">—</strong>
+        </div>
+
+        <div class="info-row">
+            <strong>Bank Account</strong><br>
+            <span id="bankNumberDisplay">Loading...</span>
+        </div>
+
+        <div class="info-row">
+            <strong>Account Name</strong><br>
+            <span id="accountNameDisplay">Loading...</span>
+        </div>
+
+        <div class="info-row">
+            <strong>Amount to Pay</strong><br>
+            PKR <strong id="amountDisplay">—</strong>
+        </div>
+
+        <p class="note">
+            Please send the exact amount to the bank account above, then click below to submit your payment proof.
+        </p>
+
+        <button class="btn btn-primary" onclick="goToVerify()">
+            <i class="fas fa-arrow-right" style="margin-right:8px;"></i> Verify Now
+        </button>
+        <button class="btn btn-ghost" onclick="goDashboard()">Back to Dashboard</button>
+    </div>
+
+    <!-- STEP 2: Transaction ID + Screenshot -->
+    <div class="card" id="step2">
+        <div class="steps">
+            <div class="step-dot done" id="dot1b"></div>
+            <div class="step-dot active" id="dot2b"></div>
+        </div>
+
+        <h2>Submit Proof</h2>
+
+        <div class="info-row">
+            Order ID &nbsp;·&nbsp; <strong id="orderIdDisplay2">—</strong>
+        </div>
+
+        <label>Transaction ID</label>
+        <input type="text" id="transactionId" placeholder="Enter your transaction / reference ID">
+
+        <button class="btn btn-primary" id="submitBtn" onclick="submitPayment()">
+            <i class="fas fa-paper-plane" style="margin-right:8px;"></i>Submit Verification
+        </button>
+        <button class="btn btn-ghost" onclick="goBackToDetails()">← Back</button>
+    </div>
+
+    <!-- PAYMENT SUCCESS ISLAND -->
+    <div class="island-overlay" id="successIsland">
+        <div class="island-box">
+            <div class="island-icon" style="color:#22c55e;"><i class="fas fa-paper-plane"></i></div>
+            <div class="island-title">Payment Submitted!</div>
+            <p class="island-sub">
+                Your payment proof has been sent. It will be verified shortly.
+            </p>
+            <div class="island-buttons">
+                <button class="island-btn primary" onclick="goOrders()">
+                    <i class="fas fa-list" style="margin-right:8px;"></i>View My Orders
+                </button>
+                <button class="island-btn secondary" onclick="goDashboard()">Back to Dashboard</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="verifyPayment.js"></script>
+</body>
+
+</html>

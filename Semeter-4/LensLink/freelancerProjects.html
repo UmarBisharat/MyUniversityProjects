@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>LensLink - My Shoots</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <script src="config.js"></script>
+  <script src="authGuard.js"></script>
+  <link rel="stylesheet" href="notifications.css">
+  <script src="notifications.js"></script>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Segoe UI", sans-serif;
+    }
+
+    body {
+      background: #020617;
+      color: #e5e7eb;
+    }
+
+    /* CUSTOM SCROLLBAR (Webkit) */
+    ::-webkit-scrollbar {
+      width: 7px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #020617;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #1e293b;
+      border-radius: 10px;
+      border: 1px solid #020617;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #38bdf8;
+    }
+
+    /* NAVBAR */
+
+    .navbar {
+      height: 70px;
+      background: #020617;
+      border-bottom: 1px solid rgba(56, 189, 248, 0.3);
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+    }
+
+    .logo {
+      font-size: 1.6rem;
+      font-weight: bold;
+      color: #38bdf8;
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 30px;
+      font-size: larger;
+    }
+
+    .nav-links li {
+      cursor: pointer;
+      color: #cbd5f5;
+    }
+
+    .nav-links li:hover {
+      color: #38bdf8;
+    }
+
+    .user-name {
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    /* PAGE */
+
+    .container {
+      padding: 40px;
+    }
+
+    .page-title {
+      font-size: 2rem;
+      margin-bottom: 30px;
+    }
+
+    /* PROJECT CARDS */
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 25px;
+    }
+
+    .project-card {
+
+      background: linear-gradient(145deg, #0f172a, #020617);
+      border-radius: 18px;
+      padding: 25px;
+
+      border: 1px solid #38bdf8;
+      box-shadow: 0 0 30px rgba(56, 189, 248, 0.15);
+
+      transition: 0.3s;
+    }
+
+    .project-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 0 45px rgba(56, 189, 248, 0.3);
+    }
+
+    .project-card h3 {
+      margin-bottom: 10px;
+    }
+
+    .project-info {
+      margin: 6px 0;
+      color: #9ca3af;
+    }
+
+    /* STATUS */
+
+    .status {
+      margin-top: 10px;
+      font-weight: 600;
+      color: #38bdf8;
+    }
+
+    /* BUTTON */
+
+    .complete-btn {
+
+      margin-top: 15px;
+      padding: 10px 16px;
+
+      border: none;
+      border-radius: 8px;
+
+      background: #38bdf8;
+      color: #020617;
+
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .complete-btn:hover {
+      background: #0ea5e9;
+    }
+
+    .empty {
+      color: #9ca3af;
+      margin-top: 20px;
+    }
+
+    .work-submitted-badge {
+      margin-top: 10px;
+      color: #38bdf8;
+      font-weight: 600;
+    }
+
+    /* SUBMIT WORK MODAL */
+    .submit-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .submit-box {
+      background: #0f172a;
+      padding: 30px;
+      border-radius: 15px;
+      width: 440px;
+      border: 1px solid #38bdf8;
+      box-shadow: 0 0 30px rgba(56, 189, 248, 0.2);
+    }
+
+    .submit-box h3 {
+      color: #38bdf8;
+      margin-bottom: 16px;
+    }
+
+    .submit-box label {
+      display: block;
+      margin-bottom: 4px;
+      color: #94a3b8;
+      font-size: 14px;
+    }
+
+    .submit-box textarea,
+    .submit-box input[type="url"] {
+      width: 100%;
+      padding: 10px;
+      background: #020617;
+      color: white;
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      border-radius: 8px;
+      font-size: 14px;
+      margin-bottom: 12px;
+    }
+
+    .submit-box textarea {
+      height: 90px;
+      resize: none;
+    }
+    /* =========================
+   📱 MOBILE (max 600px)
+========================= */
+@media (max-width: 600px) {
+
+  /* NAVBAR */
+  .navbar {
+    flex-direction: column;
+    height: auto;
+    padding: 15px 20px;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .nav-links {
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    font-size: 1rem;
+  }
+
+  .user-name {
+    font-size: 1rem;
+    margin-top: 5px;
+  }
+
+  /* PAGE */
+  .container {
+    padding: 20px;
+  }
+
+  .page-title {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+  }
+
+  /* GRID FIX */
+  .projects-grid {
+    grid-template-columns: 1fr; /* one card per row */
+    gap: 15px;
+  }
+
+  /* CARD */
+  .project-card {
+    padding: 18px;
+  }
+
+  .project-card h3 {
+    font-size: 1.1rem;
+  }
+
+  .project-info {
+    font-size: 0.9rem;
+  }
+
+  .status {
+    font-size: 0.9rem;
+  }
+
+  /* BUTTON */
+  .complete-btn {
+    width: 100%;
+    padding: 10px;
+    font-size: 0.9rem;
+  }
+
+  /* LOAD MORE */
+  #loadMoreBtn {
+    width: 100%;
+    padding: 10px;
+    font-size: 0.9rem;
+  }
+
+  /* MODAL */
+  .submit-box {
+    width: 90%;
+    padding: 20px;
+  }
+
+  .submit-box textarea,
+  .submit-box input {
+    font-size: 0.9rem;
+    padding: 8px;
+  }
+
+  .submit-box button {
+    font-size: 0.9rem;
+    padding: 8px;
+  }
+}
+  </style>
+<link rel="stylesheet" href="light-theme.css"></head>
+
+<body>
+
+  <!-- NAVBAR -->
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="logo">LensLink<i class="fa-solid fa-camera-retro"></i></div>
+    <ul class="nav-links">
+      <li onclick="goDashboard()">Dashboard</li>
+      <li id="messagesNav" onclick="goMessage()">Messages</li>
+      <li id="projectNav" onclick="goProjects()">Shoots</li>
+      <li><a href="browseJob.html" style="text-decoration:none; color:inherit;">Browse Jobs</a></li>
+
+    </ul>
+    <!-- Username filled by JS -->
+    <div class="user-name" id="navUserName">Photographer</div>
+  </nav>
+
+
+  <!-- MAIN -->
+
+  <div class="container">
+
+    <h1 class="page-title">
+      Your Shoots <i class="fa-solid fa-camera" style="color:#38bdf8"></i>
+    </h1>
+
+    <div id="projectsContainer" class="projects-grid"></div>
+
+    <div id="loadMoreContainer" style="text-align: center; margin: 40px 0; display: none;">
+      <button id="loadMoreBtn" onclick="loadMore()"
+        style="background: #38bdf8; color: #020617; font-weight: bold; padding: 12px 30px; border: none; border-radius: 10px; cursor: pointer; transition: 0.3s;">
+        Load More Projects
+      </button>
+    </div>
+
+  </div>
+
+
+
+  <script src="freelancerProjects.js"></script>
+
+  <!-- SUBMIT WORK MODAL -->
+  <div class="submit-modal" id="submitWorkModal">
+    <div class="submit-box">
+      <h3>Submit</h3>
+      <label>Description</label>
+      <textarea id="submitText" placeholder="Describe what you delivered..."></textarea>
+      <label>Link (Google Drive, GitHub, etc.)</label>
+      <input type="url" id="submitLink" placeholder="https://...">
+      <div style="display:flex; gap:10px;">
+        <button onclick="submitWork()"
+          style="flex:1; padding:10px; background:#38bdf8; border:none; border-radius:8px; font-weight:bold; cursor:pointer;">Submit</button>
+        <button onclick="closeSubmitModal()"
+          style="flex:1; padding:10px; background:#334155; border:none; border-radius:8px; color:white; cursor:pointer;">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>

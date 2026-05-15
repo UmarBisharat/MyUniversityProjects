@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Client Profile</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<script src="config.js"></script>
+<link rel="stylesheet" href="notifications.css">
+<script src="notifications.js"></script>
+
+  <style>
+    :root {
+      --primary: #38bdf8;
+      --bg: #020617;
+      --card-bg: rgba(15, 23, 42, 0.8);
+      --text: #e5e7eb;
+      --text-dim: #94a3b8;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      /* Firefox */
+      scrollbar-width: thin;
+      scrollbar-color: #38bdf8 #020617;
+    }
+
+    /* CUSTOM SCROLLBAR (Webkit) */
+    ::-webkit-scrollbar {
+      width: 7px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #020617;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1e293b;
+      border-radius: 10px;
+      border: 1px solid #020617;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #38bdf8;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* NAVBAR */
+    .navbar {
+      height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      background: rgba(2, 6, 23, 0.8);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo {
+      color: var(--primary);
+      font-weight: 800;
+      font-size: 1.5rem;
+      letter-spacing: -0.025em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 30px;
+      list-style: none;
+    }
+
+    .nav-links li {
+      cursor: pointer;
+      color: var(--text-dim);
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+
+    .nav-links li:hover {
+      color: var(--primary);
+    }
+
+    /* MAIN CONTAINER */
+    .view-wrapper {
+        padding: 60px 20px;
+        display: flex;
+        justify-content: center;
+    }
+
+    .profile-card {
+      width: 100%;
+      max-width: 900px;
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      border-radius: 24px;
+      padding: 50px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+
+    /* HEADER */
+    .header-section {
+      display: flex;
+      align-items: flex-start;
+      gap: 32px;
+      margin-bottom: 20px;
+    }
+
+    .avatar-container {
+      position: relative;
+    }
+
+    .profile-avatar {
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid var(--primary);
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.3);
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+
+    .profile-avatar:hover {
+        transform: scale(1.02);
+    }
+
+    .avatar-hint {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        background: var(--primary);
+        color: var(--bg);
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        pointer-events: none;
+    }
+
+    .editing .avatar-hint {
+        display: flex;
+    }
+
+    .header-meta {
+      flex: 1;
+      padding-top: 10px;
+    }
+
+    .profile-name {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+      letter-spacing: -0.025em;
+    }
+
+    .client-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(34, 197, 94, 0.1);
+      color: #22c55e;
+      padding: 6px 12px;
+      border-radius: 9999px;
+      font-size: 0.875rem;
+      font-weight: 600;
+    }
+
+    /* INFO GRID */
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+      gap: 24px;
+    }
+
+    .info-card {
+      background: rgba(15, 23, 42, 0.4);
+      padding: 24px;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      transition: border-color 0.2s;
+    }
+
+    .info-card:hover {
+        border-color: rgba(56, 189, 248, 0.3);
+    }
+
+    .label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-dim);
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+
+    .value {
+      font-size: 1.125rem;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    /* ACTIONS */
+    .action-bar {
+      margin-top: 48px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 16px;
+    }
+
+    .btn {
+      padding: 12px 28px;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: none;
+      font-size: 1rem;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: var(--bg);
+    }
+
+    .btn-primary:hover {
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .btn-secondary:hover {
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    /* INPUT STYLES */
+    input {
+      width: 100%;
+      background: rgba(2, 6, 23, 0.5);
+      border: 1px solid var(--primary);
+      border-radius: 8px;
+      padding: 10px 14px;
+      color: white;
+      font-size: 1rem;
+      outline: none;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    @media (max-width: 640px) {
+      .header-section {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+      .profile-card {
+        padding: 30px;
+      }
+      .info-grid {
+          grid-template-columns: 1fr;
+      }
+    }
+
+    .incomplete-alert-container {
+      background: rgba(56, 189, 248, 0.08);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      border-radius: 16px;
+      padding: 24px 32px;
+      margin: 30px auto;
+      max-width: 1100px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      animation: slideIn 0.5s ease-out, premiumPulse 3s infinite;
+    }
+
+    .incomplete-alert-message {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .incomplete-alert-icon {
+      font-size: 1.5rem;
+      color: #38bdf8;
+      background: rgba(56, 189, 248, 0.1);
+      width: 45px;
+      height: 45px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .incomplete-alert-text {
+      font-size: 1.05rem;
+      font-weight: 500;
+      color: #e5e7eb;
+      margin: 0;
+    }
+
+    .incomplete-alert-text span {
+      display: block;
+      font-size: 0.9rem;
+      color: #94a3b8;
+      font-weight: normal;
+      margin-top: 2px;
+    }
+
+    .complete-now-btn {
+      background: #38bdf8;
+      color: #020617;
+      padding: 12px 24px;
+      border-radius: 10px;
+      font-weight: 700;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 15px rgba(56, 189, 248, 0.2);
+    }
+
+    .complete-now-btn:hover {
+      background: #7dd3fc;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(56, 189, 248, 0.4);
+    }
+  </style>
+<link rel="stylesheet" href="light-theme.css"></head>
+
+<body>
+
+  <nav class="navbar">
+    <div class="logo">LensLink<i class="fa-solid fa-camera-retro"></i></div>
+    <ul class="nav-links">
+      <li onclick="goDashboard()">Dashboard</li>
+      <li onclick="goBrowse()">Browse</li>
+      <li onclick="goMessages()">Messages</li>
+    </ul>
+  </nav>
+
+  <main class="view-wrapper">
+    <div class="profile-card" id="profileCard">
+      
+      <header class="header-section">
+        <div class="avatar-container">
+          <img id="profileImage" class="profile-avatar" src="https://i.pravatar.cc/150?img=3">
+          <div class="avatar-hint">✎</div>
+        </div>
+        <div class="header-meta">
+          <h1 class="profile-name" id="profileName">Loading...</h1>
+          <div class="client-badge">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+            Active Client
+          </div>
+        </div>
+      </header>
+
+      <div id="incompletedProfile" style="display: flex; justify-content: center; align-items: center;">
+  </div>
+      <div class="info-grid">
+        <div class="info-card">
+          <div class="label">Company Name</div>
+          <div class="value" id="companyName">-</div>
+        </div>
+
+        <div class="info-card">
+          <div class="label">Contact Email</div>
+          <div class="value" id="contactEmail">-</div>
+        </div>
+
+        <div class="info-card">
+          <div class="label">Photography Type</div>
+          <div class="value" id="projectType">-</div>
+        </div>
+
+        <div class="info-card">
+          <div class="label">Standard Budget Range</div>
+          <div class="value" id="budgetRange">-</div>
+        </div>
+      </div>
+
+      <div class="action-bar">
+          <button class="btn btn-secondary" id="editBtn" onclick="editProfile()">Edit Profile</button>
+          <button class="btn btn-secondary hidden" id="cancelBtn" onclick="loadProfile()">Cancel</button>
+          <button class="btn btn-primary hidden" id="saveBtn" onclick="saveProfile()">Save Changes</button>
+      </div>
+
+    </div>
+  </main>
+
+
+<script src="clientProfileView.js"></script>
+</body>
+</html>
